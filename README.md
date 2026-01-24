@@ -202,8 +202,20 @@ The app deploys to a VPS at **https://bigblues.de** via GitHub Actions.
 | backend | FastAPI |
 | redis | Caching |
 | certbot | SSL certificate renewal (every 12h check) |
+| umami | Privacy-focused analytics |
+| umami-db | Postgres database for Umami |
 
 See `.claude/claude.md` for detailed architecture documentation.
+
+## Analytics
+
+We use [Umami](https://umami.is/) for privacy-focused analytics, self-hosted on our VPS.
+
+- **Dashboard**: https://analytics.bigblues.de
+- **Tracks**: Page views, referrers, devices, countries (no cookies, GDPR compliant)
+- **Does NOT track**: Button clicks, scroll depth, session recordings (unless custom events added)
+
+The tracking script is in `frontend/index.html`.
 
 ---
 
@@ -225,6 +237,7 @@ See `.claude/claude.md` for detailed architecture documentation.
 - [x] Styling (CSS / Tailwind)
 - [x] Dashboard redesign (frontend with mock data)
 - [x] Production deployment (CI/CD, Docker registry, VPS)
+- [x] Analytics (Umami self-hosted)
 - [ ] Dashboard backend (update endpoint to match new types)
 - [ ] Lineup drag & drop system
 - [ ] Market page
