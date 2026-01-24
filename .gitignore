@@ -1,0 +1,30 @@
+# Environment variables (contains secrets)
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# JavaScript / Frontend
+node_modules/
+dist/
+
+# IDE
+.idea/
+
+# Claude Code
+.claude/
+
+# Docker
+*.log
+
+# SSL certificates (local dev)
+nginx/certs/
+
+# Design mockups
+screenshots_UI/
+
+# Jupyter notebooks (may contain test data)
+*.ipynb

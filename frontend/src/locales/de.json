@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "market": "Markt",
+    "analytics": "Analysen",
+    "optimizer": "Optimierer"
+  },
+  "user": {
+    "profile": "Profil",
+    "settings": "Einstellungen",
+    "logout": "Abmelden"
+  },
+  "dashboard": {
+    "greeting": "Hallo, Manager",
+    "leagueRank": "Liga-Rang",
+    "ofManagers": "von {count} Managern",
+    "startingXI": "Startelf",
+    "points": "Punkte",
+    "squadValue": "Kaderwert",
+    "players": "{count} Spieler",
+    "availableCash": "Verfügbares Geld",
+    "daysToMatchday": "{days} Tage bis ST {matchday}",
+    "bestValuePlayers": "Beste Spieler nach Wert",
+    "totalPoints": "Gesamtpunkte",
+    "avgPoints": "Ø Punkte",
+    "matchdayWins": "Spieltag-Siege",
+    "currentMatchday": "Aktueller Spieltag",
+    "nextDeadline": "Nächste Deadline",
+    "bestValue": "Bester Wert",
+    "worstValue": "Schlechtester Wert",
+    "performanceHistory": "Punkteverlauf",
+    "matchdayWin": "Spieltag-Sieg",
+    "matchday": "Spieltag",
+    "lineup": "Aufstellung"
+  },
+  "lineup": {
+    "bench": "Bank",
+    "formation": "Formation",
+    "formationDesc": "Taktische Formation basierend auf den ausgewählten Spielern (Verteidiger-Mittelfeld-Stürmer)",
+    "totalPoints": "Gesamt",
+    "totalPointsDesc": "Summe aller Punkte deiner Startelf in dieser Saison",
+    "avgPoints": "Ø Punkte",
+    "avgPointsDesc": "Durchschnittliche Punkte pro Spieler in deiner Startelf",
+    "value": "Wert",
+    "valueDesc": "Kombinierter Marktwert deiner Startelf",
+    "efficiency": "Pkt/€M",
+    "efficiencyDesc": "Punkte pro Million Euro - höher bedeutet besseres Preis-Leistungs-Verhältnis",
+    "consistency": "Std Abw",
+    "consistencyDesc": "Standardabweichung - niedriger bedeutet konstantere/vorhersehbarere Leistung",
+    "recentForm": "Letzte 3",
+    "recentFormDesc": "Durchschnittliche Punkte der letzten 3 Spieltage - zeigt aktuelle Form",
+    "teams": "Teams",
+    "teamsDesc": "Anzahl verschiedener Vereine in deiner Startelf - mehr Vielfalt reduziert Ausfallrisiko"
+  },
+  "common": {
+    "loading": "Lädt...",
+    "error": "Ein Fehler ist aufgetreten",
+    "retry": "Erneut versuchen"
+  },
+  "settings": {
+    "selectLeague": "Liga auswählen"
+  },
+  "ranking": {
+    "season": "Saison",
+    "matchday": "Spieltag",
+    "matchdayNum": "Spieltag {num}",
+    "manager": "Manager",
+    "avg": "Ø",
+    "total": "Gesamt",
+    "points": "Punkte"
+  },
+  "cash": {
+    "budget": "Budget",
+    "totalAssets": "Vermögen",
+    "transferProfit": "Transfer +/-",
+    "spendableUntil": "Ausgabefähig bis ST {matchday}",
+    "mustBePositive": "Muss ≥ 0 bei Anpfiff sein",
+    "currentBudget": "(aktuelles Budget)",
+    "daysAvgProfit": "Tage (Ø Gewinn)",
+    "daysDailyBonus": "Tage (Tagesbonus)",
+    "profitHistory": "Gewinnverlauf",
+    "bestTransfers": "Beste Transfers",
+    "worstTransfers": "Schlechteste Transfers",
+    "leagueBudgets": "Liga-Budgets",
+    "manager": "Manager"
+  },
+  "squadValue": {
+    "total": "Gesamt",
+    "startingXI": "Startelf",
+    "bench": "Bank",
+    "budget": "Budget",
+    "totalAssets": "Gesamtvermögen",
+    "byPosition": "Wert nach Position",
+    "mostValuable": "Wertvollster",
+    "leastValuable": "Geringster Wert",
+    "leagueComparison": "Liga-Vergleich",
+    "yourRank": "Dein Rang",
+    "leagueMin": "Liga Min",
+    "leagueAvg": "Liga Ø",
+    "leagueMax": "Liga Max",
+    "history": "Wertverlauf",
+    "start": "Start",
+    "you": "Du"
+  },
+  "matchday": {
+    "fixtures": "Spiele",
+    "table": "Tabelle",
+    "matchdayNum": "Spieltag {num}",
+    "team": "Team",
+    "played": "Sp",
+    "gd": "TD",
+    "pts": "Pkt",
+    "kbPts": "KB Pkt",
+    "homeTeam": "Heimteam"
+  }
+}

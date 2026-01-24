@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "market": "Market",
+    "analytics": "Analytics",
+    "optimizer": "Optimizer"
+  },
+  "user": {
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "greeting": "Hello, Manager",
+    "leagueRank": "League Rank",
+    "ofManagers": "of {count} managers",
+    "startingXI": "Starting XI",
+    "points": "Points",
+    "squadValue": "Squad Value",
+    "players": "{count} players",
+    "availableCash": "Available Cash",
+    "daysToMatchday": "{days} days to MD {matchday}",
+    "bestValuePlayers": "Best Value Players",
+    "totalPoints": "Total Points",
+    "avgPoints": "Avg Points",
+    "matchdayWins": "Matchday Wins",
+    "currentMatchday": "Current Matchday",
+    "nextDeadline": "Next Deadline",
+    "bestValue": "Best Value",
+    "worstValue": "Worst Value",
+    "performanceHistory": "Performance History",
+    "matchdayWin": "Matchday Win",
+    "matchday": "Matchday",
+    "lineup": "Lineup"
+  },
+  "lineup": {
+    "bench": "Bench",
+    "formation": "Formation",
+    "formationDesc": "Tactical formation based on selected players (Defenders-Midfielders-Forwards)",
+    "totalPoints": "Total Pts",
+    "totalPointsDesc": "Sum of all points scored by your starting 11 this season",
+    "avgPoints": "Avg Pts",
+    "avgPointsDesc": "Average points per player in your starting 11",
+    "value": "Value",
+    "valueDesc": "Combined market value of your starting 11",
+    "efficiency": "Pts/€M",
+    "efficiencyDesc": "Points scored per million euros spent - higher is better value",
+    "consistency": "Std Dev",
+    "consistencyDesc": "Standard deviation - lower means more consistent/predictable performance",
+    "recentForm": "Last 3",
+    "recentFormDesc": "Average points over the last 3 matchdays - shows current form",
+    "teams": "Teams",
+    "teamsDesc": "Number of different clubs in your starting 11 - more diversity reduces fixture risk"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry"
+  },
+  "settings": {
+    "selectLeague": "Select League"
+  },
+  "ranking": {
+    "season": "Season",
+    "matchday": "Matchday",
+    "matchdayNum": "Matchday {num}",
+    "manager": "Manager",
+    "avg": "Avg",
+    "total": "Total",
+    "points": "Points"
+  },
+  "cash": {
+    "budget": "Budget",
+    "totalAssets": "Total Assets",
+    "transferProfit": "Transfer Profit",
+    "spendableUntil": "Spendable until MD {matchday}",
+    "mustBePositive": "Must be ≥ 0 at kickoff",
+    "currentBudget": "(current budget)",
+    "daysAvgProfit": "days (avg. profit)",
+    "daysDailyBonus": "days (daily bonus)",
+    "profitHistory": "Profit History",
+    "bestTransfers": "Best Transfers",
+    "worstTransfers": "Worst Transfers",
+    "leagueBudgets": "League Budgets",
+    "manager": "Manager"
+  },
+  "squadValue": {
+    "total": "Total",
+    "startingXI": "Starting XI",
+    "bench": "Bench",
+    "budget": "Budget",
+    "totalAssets": "Total Assets",
+    "byPosition": "Value by Position",
+    "mostValuable": "Most Valuable",
+    "leastValuable": "Least Valuable",
+    "leagueComparison": "League Comparison",
+    "yourRank": "Your Rank",
+    "leagueMin": "League Min",
+    "leagueAvg": "League Avg",
+    "leagueMax": "League Max",
+    "history": "Value History",
+    "start": "Start",
+    "you": "You"
+  },
+  "matchday": {
+    "fixtures": "Fixtures",
+    "table": "Table",
+    "matchdayNum": "Matchday {num}",
+    "team": "Team",
+    "played": "P",
+    "gd": "GD",
+    "pts": "Pts",
+    "kbPts": "KB Pts",
+    "homeTeam": "Home Team"
+  }
+}

@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Custom styles go below.
+ * Prefer Tailwind classes in components, but add global styles here if needed.
+ */
+
+/* Smooth transitions for dark mode */
+html {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* True black background in dark mode */
+html.dark {
+  background-color: #0a0a0a;
+  color-scheme: dark;
+}
+
+/* Hide scrollbar but keep functionality (for mobile nav, etc.) */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scrollbar that only shows while scrolling */
+.scrollbar-autohide {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.scrollbar-autohide.is-scrolling {
+  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+}
+.scrollbar-autohide::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollbar-autohide::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-autohide::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+.scrollbar-autohide.is-scrolling::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.5);
+}
