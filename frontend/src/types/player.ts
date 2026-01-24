@@ -3,7 +3,7 @@
  * Comprehensive player information for the detailed player view.
  */
 
-import type { Manager, TeamInfo, Fixture } from './dashboard'
+import type { Manager, TeamInfo } from './dashboard'
 
 // ============================================
 // Player Status

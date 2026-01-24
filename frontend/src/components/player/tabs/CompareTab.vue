@@ -172,7 +172,7 @@
 import { computed, h } from 'vue'
 import { useI18n } from 'vue-i18n'
 import RankBadge from '../shared/RankBadge.vue'
-import { POSITION_LABELS, POSITION_COLORS } from '@/types/player'
+import { POSITION_LABELS } from '@/types/player'
 import type { PlayerDetail } from '@/types/player'
 
 const props = defineProps<{
@@ -182,7 +182,6 @@ const props = defineProps<{
 const { t } = useI18n()
 
 const positionLabel = computed(() => POSITION_LABELS[props.player.position] || '?')
-const positionColors = computed(() => POSITION_COLORS[props.player.position])
 
 const positionBgClass = computed(() => {
   switch (props.player.position) {

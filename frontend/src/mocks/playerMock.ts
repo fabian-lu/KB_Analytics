@@ -1,20 +1,11 @@
 import type {
   PlayerDetail,
-  SeasonPerformance,
   MatchdayPoints,
   PricePoint,
   PriceForecast,
   UpcomingFixture,
   TransferEvent,
   NewsArticle,
-  HomeAwayStats,
-  SeasonStats,
-  ValueTrends,
-  OwnershipInfo,
-  EfficiencyStats,
-  RankingInfo,
-  PositionAverage,
-  FormTrend,
 } from '@/types/player'
 import type { TeamInfo, Manager } from '@/types/dashboard'
 
@@ -164,7 +155,7 @@ function generateUpcomingFixtures(team: TeamInfo): UpcomingFixture[] {
   return fixtures
 }
 
-function generateTransferHistory(playerId: string): TransferEvent[] {
+function generateTransferHistory(): TransferEvent[] {
   const history: TransferEvent[] = []
   const numTransfers = Math.floor(Math.random() * 5) + 1
 
@@ -600,7 +591,7 @@ const mockNeuer: PlayerDetail = {
 
   next_fixtures: generateUpcomingFixtures(teams.fcb),
 
-  transfer_history: generateTransferHistory('gk1'),
+  transfer_history: generateTransferHistory(),
 
   ligainsider_url: 'https://www.ligainsider.de/manuel-neuer/',
   news: generateNews('Manuel Neuer'),

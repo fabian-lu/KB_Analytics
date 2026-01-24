@@ -90,25 +90,29 @@ const tabs = [
 ]
 
 // Fetch player when modal opens
-watch(() => [props.open, props.playerId], async ([isOpen, id]) => {
-  if (isOpen && id) {
-    loading.value = true
-    error.value = null
-    player.value = null
-    activeTab.value = 'overview'
+watch(
+  () => ({ open: props.open, playerId: props.playerId }),
+  async ({ open, playerId }) => {
+    if (open && playerId) {
+      loading.value = true
+      error.value = null
+      player.value = null
+      activeTab.value = 'overview'
 
-    try {
-      const data = await getPlayerDetail({ playerId: id })
-      if (data) {
-        player.value = data
-      } else {
-        error.value = t('player.notFound')
+      try {
+        const data = await getPlayerDetail({ playerId })
+        if (data) {
+          player.value = data
+        } else {
+          error.value = t('player.notFound')
+        }
+      } catch (e) {
+        error.value = t('player.errorLoading')
+      } finally {
+        loading.value = false
       }
-    } catch (e) {
-      error.value = t('player.errorLoading')
-    } finally {
-      loading.value = false
     }
-  }
-}, { immediate: true })
+  },
+  { immediate: true }
+)
 </script>
