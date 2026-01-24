@@ -11,6 +11,7 @@
           :key="player.id"
           :player="player"
           type="best"
+          @click="openPlayerModal"
         />
       </div>
     </div>
@@ -26,15 +27,25 @@
           :key="player.id"
           :player="player"
           type="worst"
+          @click="openPlayerModal"
         />
       </div>
     </div>
   </div>
+
+  <!-- Player Modal -->
+  <PlayerModal
+    :open="!!selectedPlayerId"
+    :player-id="selectedPlayerId || ''"
+    @close="selectedPlayerId = null"
+  />
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import PlayerValueCard from './PlayerValueCard.vue'
+import PlayerModal from '@/components/player/PlayerModal.vue'
 import type { PlayerSummary } from '@/types/dashboard'
 
 defineProps<{
@@ -43,4 +54,10 @@ defineProps<{
 }>()
 
 const { t } = useI18n()
+
+const selectedPlayerId = ref<string | null>(null)
+
+function openPlayerModal(playerId: string) {
+  selectedPlayerId.value = playerId
+}
 </script>

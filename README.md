@@ -214,6 +214,7 @@ We use [Umami](https://umami.is/) for privacy-focused analytics, self-hosted on 
 - **Dashboard**: https://analytics.bigblues.de
 - **Tracks**: Page views, referrers, devices, countries (no cookies, GDPR compliant)
 - **Does NOT track**: Button clicks, scroll depth, session recordings (unless custom events added)
+- **Localhost excluded**: Uses `data-domains` to only track on production (bigblues.de)
 
 The tracking script is in `frontend/index.html`.
 
@@ -238,6 +239,7 @@ The tracking script is in `frontend/index.html`.
 - [x] Dashboard redesign (frontend with mock data)
 - [x] Production deployment (CI/CD, Docker registry, VPS)
 - [x] Analytics (Umami self-hosted)
+- [x] Player detail modal (6 tabs: overview, stats, value, compare, history, news)
 - [ ] Dashboard backend (update endpoint to match new types)
 - [ ] Lineup drag & drop system
 - [ ] Market page

@@ -1,5 +1,8 @@
 <template>
-  <div class="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50">
+  <div
+    class="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-800/50 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors"
+    @click="$emit('click', player.id)"
+  >
     <!-- Player image -->
     <img
       :src="player.profile_image"
@@ -36,6 +39,10 @@ import type { PlayerSummary } from '@/types/dashboard'
 const props = defineProps<{
   player: PlayerSummary
   type: 'best' | 'worst'
+}>()
+
+defineEmits<{
+  click: [playerId: string]
 }>()
 
 const valueClass = computed(() => {

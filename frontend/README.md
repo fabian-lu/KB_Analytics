@@ -46,11 +46,28 @@ frontend/
 │   │   │   ├── BottomNav.vue    # Mobile bottom tab bar (curved SVG design)
 │   │   │   └── UserMenu.vue     # User dropdown (profile, settings, logout)
 │   │   │
-│   │   ├── SettingsModal.vue    # Settings modal (league selection)
+│   │   ├── player/              # Player detail modal components
+│   │   │   ├── PlayerModal.vue      # Main modal with tab navigation
+│   │   │   ├── PlayerHeader.vue     # Sticky hero section
+│   │   │   ├── tabs/                # Tab content components
+│   │   │   │   ├── OverviewTab.vue  # Status, form, fixtures, quick stats
+│   │   │   │   ├── StatsTab.vue     # Performance chart, season stats
+│   │   │   │   ├── ValueTab.vue     # Price chart, forecast, ROI
+│   │   │   │   ├── CompareTab.vue   # Rankings, position comparison
+│   │   │   │   ├── HistoryTab.vue   # Transfer history, season comparison
+│   │   │   │   └── NewsTab.vue      # Ligainsider, Google News, links
+│   │   │   └── shared/              # Shared player components
+│   │   │       ├── StatBox.vue      # Compact stat display
+│   │   │       ├── TrendBadge.vue   # Up/down trend indicator
+│   │   │       ├── RankBadge.vue    # Rank display (#5 of 520)
+│   │   │       ├── MiniBarChart.vue # Inline spark chart
+│   │   │       ├── FixtureRow.vue   # Upcoming match row
+│   │   │       └── FormIndicator.vue # Form trend indicator
 │   │   │
 │   │   ├── ui/                  # Reusable UI components
-│   │   │   └── ...
+│   │   │   └── BaseModal.vue    # Modal wrapper (sm, md, lg, fullscreen)
 │   │   │
+│   │   ├── SettingsModal.vue    # Settings modal (league selection)
 │   │   ├── DarkModeToggle.vue   # Sun/moon toggle
 │   │   └── LanguageToggle.vue   # Flag dropdown (EN/DE)
 │   │
@@ -66,13 +83,19 @@ frontend/
 │   │   ├── client.ts
 │   │   ├── public.ts
 │   │   ├── auth.ts
-│   │   └── dashboard.ts
+│   │   ├── dashboard.ts
+│   │   └── player.ts        # getPlayerDetail (uses mock for now)
 │   │
 │   ├── types/               # TypeScript interfaces
 │   │   ├── index.ts
 │   │   ├── table.ts
 │   │   ├── auth.ts
-│   │   └── dashboard.ts
+│   │   ├── dashboard.ts
+│   │   └── player.ts        # PlayerDetail, nested types for player modal
+│   │
+│   ├── mocks/               # Mock data for development
+│   │   ├── dashboardMock.ts # Dashboard response mock
+│   │   └── playerMock.ts    # Player detail mock (Florian Wirtz)
 │   │
 │   ├── composables/         # Reusable stateful logic
 │   │   ├── useAuth.ts       # Auth state
