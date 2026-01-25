@@ -2,8 +2,8 @@
   "nav": {
     "dashboard": "Dashboard",
     "market": "Markt",
-    "analytics": "Analysen",
-    "optimizer": "Optimierer"
+    "league": "Liga",
+    "insights": "Insights"
   },
   "user": {
     "profile": "Profil",

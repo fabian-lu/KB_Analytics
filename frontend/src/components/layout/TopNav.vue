@@ -57,8 +57,8 @@ const { isDark } = useDarkMode()
 const navItems = [
   { key: 'dashboard', path: '/dashboard' },
   { key: 'market', path: '/market' },
-  { key: 'analytics', path: '/analytics' },
-  { key: 'optimizer', path: '/optimizer' },
+  { key: 'league', path: '/league' },
+  { key: 'insights', path: '/insights' },
 ]
 
 function isActive(path: string): boolean {

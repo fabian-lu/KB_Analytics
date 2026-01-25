@@ -57,7 +57,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { LayoutDashboard, Store, BarChart3, Sparkles } from 'lucide-vue-next'
+import { LayoutDashboard, Store, Trophy, Sparkles } from 'lucide-vue-next'
 
 const route = useRoute()
 const { t } = useI18n()
@@ -65,8 +65,8 @@ const { t } = useI18n()
 const navItems = [
   { key: 'dashboard', path: '/dashboard', icon: LayoutDashboard },
   { key: 'market', path: '/market', icon: Store },
-  { key: 'analytics', path: '/analytics', icon: BarChart3 },
-  { key: 'optimizer', path: '/optimizer', icon: Sparkles },
+  { key: 'league', path: '/league', icon: Trophy },
+  { key: 'insights', path: '/insights', icon: Sparkles },
 ]
 
 function isActive(path: string): boolean {

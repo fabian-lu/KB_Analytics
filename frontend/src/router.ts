@@ -27,13 +27,13 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/analytics',
-      component: () => import('./pages/AnalyticsPage.vue'),
+      path: '/league',
+      component: () => import('./pages/LeaguePage.vue'),
       meta: { requiresAuth: true },
     },
     {
-      path: '/optimizer',
-      component: () => import('./pages/OptimizerPage.vue'),
+      path: '/insights',
+      component: () => import('./pages/InsightsPage.vue'),
       meta: { requiresAuth: true },
     },
   ],

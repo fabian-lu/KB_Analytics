@@ -10,6 +10,7 @@ venv/
 # JavaScript / Frontend
 node_modules/
 dist/
+*.tsbuildinfo
 
 # IDE
 .idea/
