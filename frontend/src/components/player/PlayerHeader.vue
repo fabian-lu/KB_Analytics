@@ -32,8 +32,8 @@
         </span>
       </div>
 
-      <!-- Status badge -->
-      <div class="flex items-center gap-2 mt-2">
+      <!-- Status badge + mobile stats -->
+      <div class="flex items-center gap-2 mt-2 flex-wrap">
         <span
           class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
           :class="statusClasses"
@@ -41,7 +41,15 @@
           <span class="w-1.5 h-1.5 rounded-full" :class="statusDotClass" />
           {{ t(`player.status.${player.status}`) }}
         </span>
-        <span v-if="player.status_note" class="text-xs text-gray-500 dark:text-gray-400 truncate">
+        <!-- Mobile inline stats -->
+        <div class="flex sm:hidden items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+          <span class="font-semibold text-gray-900 dark:text-white">{{ formatValue(player.value.current) }}</span>
+          <span class="text-gray-300 dark:text-gray-600">|</span>
+          <span><span class="font-semibold text-gray-900 dark:text-white">{{ player.current_season.total_points }}</span> pts</span>
+          <span class="text-gray-300 dark:text-gray-600">|</span>
+          <span>Ø <span class="font-semibold text-gray-900 dark:text-white">{{ player.current_season.avg_points.toFixed(1) }}</span></span>
+        </div>
+        <span v-if="player.status_note" class="text-xs text-gray-500 dark:text-gray-400 truncate hidden sm:inline">
           {{ player.status_note }}
         </span>
       </div>
@@ -62,22 +70,6 @@
         <p class="text-lg font-bold text-gray-900 dark:text-white">{{ player.current_season.avg_points.toFixed(1) }}</p>
         <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase">{{ t('player.avgShort') }}</p>
       </div>
-    </div>
-  </div>
-
-  <!-- Key stats (mobile only) -->
-  <div class="flex sm:hidden justify-between mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
-    <div class="text-center flex-1">
-      <p class="text-base font-bold text-gray-900 dark:text-white">{{ formatValue(player.value.current) }}</p>
-      <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase">{{ t('player.value') }}</p>
-    </div>
-    <div class="text-center flex-1 border-l border-gray-200 dark:border-gray-700">
-      <p class="text-base font-bold text-gray-900 dark:text-white">{{ player.current_season.total_points }}</p>
-      <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase">{{ t('player.points') }}</p>
-    </div>
-    <div class="text-center flex-1 border-l border-gray-200 dark:border-gray-700">
-      <p class="text-base font-bold text-gray-900 dark:text-white">{{ player.current_season.avg_points.toFixed(1) }}</p>
-      <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase">{{ t('player.avgShort') }}</p>
     </div>
   </div>
 </template>

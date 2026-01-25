@@ -62,6 +62,10 @@ const navItems = [
 ]
 
 function isActive(path: string): boolean {
-  return route.path === path
+  // For nested routes (e.g., /market/overview), check if current path starts with nav path
+  if (path === '/dashboard') {
+    return route.path === '/dashboard'
+  }
+  return route.path.startsWith(path)
 }
 </script>

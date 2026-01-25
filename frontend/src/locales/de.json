@@ -5,6 +5,34 @@
     "league": "Liga",
     "insights": "Insights"
   },
+  "market": {
+    "tabs": {
+      "overview": "Übersicht",
+      "players": "Spieler",
+      "transfers": "Transfers",
+      "freeAgents": "Vereinslose",
+      "watchlist": "Merkliste",
+      "trends": "Trends"
+    }
+  },
+  "league": {
+    "tabs": {
+      "standings": "Tabelle",
+      "members": "Mitglieder",
+      "results": "Ergebnisse",
+      "statistics": "Statistiken",
+      "rules": "Regeln"
+    }
+  },
+  "insights": {
+    "tabs": {
+      "predictions": "Prognosen",
+      "optimizer": "Optimierer",
+      "assistant": "KI-Assistent",
+      "trends": "Trends",
+      "alerts": "Benachrichtigungen"
+    }
+  },
   "user": {
     "profile": "Profil",
     "settings": "Einstellungen",

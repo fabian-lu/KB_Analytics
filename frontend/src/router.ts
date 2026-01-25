@@ -23,18 +23,100 @@ const router = createRouter({
     },
     {
       path: '/market',
-      component: () => import('./pages/MarketPage.vue'),
+      component: () => import('./pages/market/MarketLayout.vue'),
       meta: { requiresAuth: true },
+      children: [
+        {
+          path: '',
+          redirect: '/market/overview',
+        },
+        {
+          path: 'overview',
+          component: () => import('./pages/market/MarketOverview.vue'),
+        },
+        {
+          path: 'players',
+          component: () => import('./pages/market/MarketPlayers.vue'),
+        },
+        {
+          path: 'transfers',
+          component: () => import('./pages/market/MarketTransfers.vue'),
+        },
+        {
+          path: 'free-agents',
+          component: () => import('./pages/market/MarketFreeAgents.vue'),
+        },
+        {
+          path: 'watchlist',
+          component: () => import('./pages/market/MarketWatchlist.vue'),
+        },
+        {
+          path: 'trends',
+          component: () => import('./pages/market/MarketTrends.vue'),
+        },
+      ],
     },
     {
       path: '/league',
-      component: () => import('./pages/LeaguePage.vue'),
+      component: () => import('./pages/league/LeagueLayout.vue'),
       meta: { requiresAuth: true },
+      children: [
+        {
+          path: '',
+          redirect: '/league/standings',
+        },
+        {
+          path: 'standings',
+          component: () => import('./pages/league/LeagueStandings.vue'),
+        },
+        {
+          path: 'members',
+          component: () => import('./pages/league/LeagueMembers.vue'),
+        },
+        {
+          path: 'results',
+          component: () => import('./pages/league/LeagueResults.vue'),
+        },
+        {
+          path: 'statistics',
+          component: () => import('./pages/league/LeagueStatistics.vue'),
+        },
+        {
+          path: 'rules',
+          component: () => import('./pages/league/LeagueRules.vue'),
+        },
+      ],
     },
     {
       path: '/insights',
-      component: () => import('./pages/InsightsPage.vue'),
+      component: () => import('./pages/insights/InsightsLayout.vue'),
       meta: { requiresAuth: true },
+      children: [
+        {
+          path: '',
+          redirect: '/insights/predictions',
+        },
+        {
+          path: 'predictions',
+          component: () => import('./pages/insights/InsightsPredictions.vue'),
+        },
+        {
+          path: 'optimizer',
+          component: () => import('./pages/insights/InsightsOptimizer.vue'),
+        },
+        {
+          path: 'assistant',
+          component: () => import('./pages/insights/InsightsAssistant.vue'),
+        },
+        {
+          path: 'trends',
+          component: () => import('./pages/insights/InsightsTrends.vue'),
+        },
+        {
+          path: 'alerts',
+          component: () => import('./pages/insights/InsightsAlerts.vue'),
+        },
+      ],
     },
   ],
 })
