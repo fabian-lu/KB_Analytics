@@ -240,9 +240,11 @@ The tracking script is in `frontend/index.html`.
 - [x] Production deployment (CI/CD, Docker registry, VPS)
 - [x] Analytics (Umami self-hosted)
 - [x] Player detail modal (6 tabs: overview, stats, value, compare, history, news)
+- [x] Page structure with nested routes (Market, League, Insights subpages)
+- [x] Mobile swipe navigation between subpages
 - [ ] Dashboard backend (update endpoint to match new types)
 - [ ] Lineup drag & drop system
-- [ ] Market page
+- [ ] Build out subpage content (Market, League, Insights)
 - [ ] ML predictions
 - [ ] Lineup optimizer
 

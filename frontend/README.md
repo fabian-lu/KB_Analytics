@@ -14,6 +14,7 @@ Vue.js PWA for Kickbase Analytics.
 - **Lucide** - Icon library
 - **vue-i18n** - Internationalization (EN/DE)
 - **Chart.js** - Charts (via vue-chartjs)
+- **@vueuse/core** - Vue composables (useSwipe for mobile gestures)
 
 ## Project Structure
 
@@ -46,9 +47,18 @@ frontend/
 │   │   │   ├── BottomNav.vue    # Mobile bottom tab bar (curved SVG design)
 │   │   │   └── UserMenu.vue     # User dropdown (profile, settings, logout)
 │   │   │
+│   │   ├── dashboard/           # Dashboard-specific components
+│   │   │   ├── StatCard.vue
+│   │   │   ├── StatsGridTop.vue
+│   │   │   ├── StatsGridBottom.vue
+│   │   │   ├── UserProfileCard.vue
+│   │   │   ├── PerformanceChart.vue
+│   │   │   ├── PlayerValueCard.vue
+│   │   │   └── PlayerValueSection.vue
+│   │   │
 │   │   ├── player/              # Player detail modal components
-│   │   │   ├── PlayerModal.vue      # Main modal with tab navigation
-│   │   │   ├── PlayerHeader.vue     # Sticky hero section
+│   │   │   ├── PlayerModal.vue      # Main modal with tab navigation + swipe
+│   │   │   ├── PlayerHeader.vue     # Sticky hero section (compact on mobile)
 │   │   │   ├── tabs/                # Tab content components
 │   │   │   │   ├── OverviewTab.vue  # Status, form, fixtures, quick stats
 │   │   │   │   ├── StatsTab.vue     # Performance chart, season stats
@@ -74,9 +84,31 @@ frontend/
 │   ├── pages/               # Page components (one per route)
 │   │   ├── PublicPage.vue       # Landing page (not logged in)
 │   │   ├── DashboardPage.vue    # User's dashboard
-│   │   ├── MarketPage.vue       # Market (scaffold)
-│   │   ├── AnalyticsPage.vue    # Analytics (scaffold)
-│   │   └── OptimizerPage.vue    # Optimizer (scaffold)
+│   │   │
+│   │   ├── market/              # Market section (nested routes)
+│   │   │   ├── MarketLayout.vue     # Layout with secondary nav + swipe
+│   │   │   ├── MarketOverview.vue
+│   │   │   ├── MarketPlayers.vue
+│   │   │   ├── MarketTransfers.vue
+│   │   │   ├── MarketFreeAgents.vue
+│   │   │   ├── MarketWatchlist.vue
+│   │   │   └── MarketTrends.vue
+│   │   │
+│   │   ├── league/              # League section (nested routes)
+│   │   │   ├── LeagueLayout.vue
+│   │   │   ├── LeagueStandings.vue
+│   │   │   ├── LeagueMembers.vue
+│   │   │   ├── LeagueResults.vue
+│   │   │   ├── LeagueStatistics.vue
+│   │   │   └── LeagueRules.vue
+│   │   │
+│   │   └── insights/            # Insights section (nested routes)
+│   │       ├── InsightsLayout.vue
+│   │       ├── InsightsPredictions.vue
+│   │       ├── InsightsOptimizer.vue
+│   │       ├── InsightsAssistant.vue
+│   │       ├── InsightsTrends.vue
+│   │       └── InsightsAlerts.vue
 │   │
 │   ├── api/                 # Backend API calls
 │   │   ├── index.ts
@@ -587,3 +619,107 @@ const navPath = computed(() => {
 - Extensible for future settings
 
 League changes trigger a data refresh via watcher in DashboardPage.
+
+---
+
+## Nested Routes (Subpages)
+
+Market, League, and Insights use nested routes for subpage navigation.
+
+### Route Structure
+
+```typescript
+// router.ts
+{
+  path: '/market',
+  component: () => import('./pages/market/MarketLayout.vue'),
+  meta: { requiresAuth: true },
+  children: [
+    { path: '', redirect: '/market/overview' },
+    { path: 'overview', component: () => import('./pages/market/MarketOverview.vue') },
+    { path: 'players', component: () => import('./pages/market/MarketPlayers.vue') },
+    // ... more children
+  ],
+}
+```
+
+### Why Nested Routes?
+
+- **Umami Analytics**: Each subpage has a unique URL, so page views are automatically tracked
+- **Shareable URLs**: Users can bookmark specific subpages
+- **PWA friendly**: Vue Router handles client-side navigation
+
+### Layout Components
+
+Each section has a Layout component (e.g., `MarketLayout.vue`) that provides:
+- Secondary navigation (horizontal tabs)
+- `<RouterView>` for rendering child components
+- Swipe gesture handling
+
+---
+
+## Mobile Swipe Navigation
+
+On mobile, users can swipe left/right to navigate between subpages.
+
+### Implementation
+
+Uses `@vueuse/core` useSwipe composable:
+
+```typescript
+import { useSwipe } from '@vueuse/core'
+
+const { direction } = useSwipe(swipeContainer, {
+  threshold: 50,
+  onSwipeEnd() {
+    if (direction.value === 'left') {
+      navigateToTab(currentIndex.value + 1)
+    } else if (direction.value === 'right') {
+      navigateToTab(currentIndex.value - 1)
+    }
+  },
+})
+```
+
+### Slide Animations
+
+CSS transitions provide slide animations:
+
+```css
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: all 0.25s ease-out;
+}
+
+.slide-left-enter-from { transform: translateX(100%); opacity: 0; }
+.slide-left-leave-to { transform: translateX(-100%); opacity: 0; }
+.slide-right-enter-from { transform: translateX(-100%); opacity: 0; }
+.slide-right-leave-to { transform: translateX(100%); opacity: 0; }
+
+/* Prevent flicker by positioning leaving element absolutely */
+.slide-left-leave-active,
+.slide-right-leave-active {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+```
+
+### Where Swipe is Enabled
+
+- Market, League, Insights layouts (subpage navigation)
+- PlayerModal (tab navigation)
+
+### Chart Interaction
+
+In PlayerModal, swipe is disabled when touch starts on a chart (canvas element):
+
+```typescript
+onSwipeStart(e) {
+  const target = e.target as HTMLElement
+  swipeStartedOnChart.value = target.tagName === 'CANVAS' || !!target.closest('canvas')
+}
+```
