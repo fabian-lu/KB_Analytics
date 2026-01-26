@@ -58,7 +58,12 @@ frontend/
 │   │   │
 │   │   ├── market/              # Market page components
 │   │   │   ├── PlayerRow.vue        # Compact row for list view
-│   │   │   └── PlayerCard.vue       # Card component for grid view
+│   │   │   ├── PlayerCard.vue       # Card component for grid view
+│   │   │   ├── AnalysisChart.vue    # Scatter plot with regression lines
+│   │   │   ├── SimilarPlayersFinder.vue  # Find similar player alternatives
+│   │   │   ├── FormTrendSection.vue      # Hot/Cold form players
+│   │   │   ├── ValueMomentumSection.vue  # Accelerating/Decelerating value
+│   │   │   └── BreakoutCandidates.vue    # Young rising players
 │   │   │
 │   │   ├── player/              # Player detail modal components
 │   │   │   ├── PlayerModal.vue      # Main modal with tab navigation + swipe
@@ -91,12 +96,12 @@ frontend/
 │   │   │
 │   │   ├── market/              # Market section (nested routes)
 │   │   │   ├── MarketLayout.vue     # Layout with secondary nav + swipe
-│   │   │   ├── MarketOverview.vue
-│   │   │   ├── MarketPlayers.vue
-│   │   │   ├── MarketTransfers.vue
-│   │   │   ├── MarketFreeAgents.vue
-│   │   │   ├── MarketWatchlist.vue
-│   │   │   └── MarketTrends.vue
+│   │   │   ├── MarketPlayers.vue    # Player database with filters
+│   │   │   ├── MarketAnalysis.vue   # Charts, trends, similar players
+│   │   │   ├── MarketCompare.vue
+│   │   │   ├── MarketMatchups.vue
+│   │   │   ├── MarketBestXI.vue
+│   │   │   └── MarketWatchlist.vue
 │   │   │
 │   │   ├── league/              # League section (nested routes)
 │   │   │   ├── LeagueLayout.vue
@@ -128,7 +133,8 @@ frontend/
 │   │   ├── auth.ts
 │   │   ├── dashboard.ts
 │   │   ├── player.ts        # PlayerDetail, nested types for player modal
-│   │   └── market.ts        # MarketPlayer, filter/sort types for market page
+│   │   ├── market.ts        # MarketPlayer, filter/sort types for market page
+│   │   └── analysis.ts      # ChartDataPoint, RegressionResult, analysis utilities
 │   │
 │   ├── mocks/               # Mock data for development
 │   │   ├── dashboardMock.ts # Dashboard response mock
@@ -721,14 +727,20 @@ CSS transitions provide slide animations:
 
 ### Chart Interaction
 
-In PlayerModal, swipe is disabled when touch starts on a chart (canvas element):
+Swipe navigation is disabled when touch starts on a chart (canvas element). This applies to both PlayerModal and MarketLayout:
 
 ```typescript
 onSwipeStart(e) {
   const target = e.target as HTMLElement
-  swipeStartedOnChart.value = target.tagName === 'CANVAS' || !!target.closest('canvas')
+  // Block swipe if it started on a canvas (chart) element
+  if (target.tagName === 'CANVAS' || target.closest('canvas')) {
+    swipeBlocked.value = true
+    return
+  }
 }
 ```
+
+This prevents accidental page/tab navigation when users interact with charts like the Analysis scatter plot.
 
 ---
 

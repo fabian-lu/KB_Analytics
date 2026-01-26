@@ -115,14 +115,22 @@ watch(() => route.path, () => {
   nextTick(scrollActiveTabIntoView)
 })
 
-// Swipe detection — ignore swipes that start on horizontally scrollable elements
+// Swipe detection — ignore swipes that start on horizontally scrollable elements or charts
 const swipeBlocked = ref(false)
 
 const { direction } = useSwipe(swipeContainer, {
   threshold: 50,
   onSwipeStart(e) {
+    const target = e.target as HTMLElement
+
+    // Block swipe if it started on a canvas (chart) element
+    if (target.tagName === 'CANVAS' || target.closest('canvas')) {
+      swipeBlocked.value = true
+      return
+    }
+
     // Walk up from touch target to see if it's inside a horizontally scrollable container
-    let el = e.target as HTMLElement | null
+    let el: HTMLElement | null = target
     while (el && el !== swipeContainer.value) {
       if (el.scrollWidth > el.clientWidth + 1) {
         swipeBlocked.value = true

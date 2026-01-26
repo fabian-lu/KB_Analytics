@@ -462,4 +462,25 @@ The app should emphasize:
 - Player modal: Done (6 tabs - overview, stats, value, compare, history, news)
 - Mobile swipe navigation: Done
 - Nested routes structure: Done (ready for real subpages)
+- **Market > Players**: Done (full player database with search, filters, sort, list/card views)
+- **Market > Analysis**: Done (scatter chart with regression, similar players, form trends, value momentum, breakout candidates)
 - Backend: Needs updating to provide data for these features
+
+### Market > Analysis Features Implemented
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Value vs Points Chart | ✅ Done | Scatter plot with clickable players, hover tooltips |
+| Regression Trend Lines | ✅ Done | All players + per-position (GK/DEF/MID/FWD), toggleable |
+| Position Filters | ✅ Done | Filter displayed players by position |
+| Outlier Filter | ✅ Done | Show all / Overperformers / Underperformers |
+| Search to Highlight | ✅ Done | Highlight players in red with name labels |
+| Similar Players | ✅ Done | Find cheaper alternatives with similar stats |
+| Hot Form Players | ✅ Done | Players with positive form vs season avg |
+| Cold Streaks | ✅ Done | Players with negative form vs season avg |
+| Value Momentum | ✅ Done | Accelerating/Decelerating value change |
+| Breakout Candidates | ✅ Done | Young (≤24) players on the rise |
+| Raw Points Rankings | ❌ Skipped | Per user request |
+| Hidden Gems Algorithm | ❌ Skipped | Per user request |
+| Price History Chart | ❌ Skipped | Per user request |
+| Raw Points Breakdown | ❌ Skipped | Per user request |
