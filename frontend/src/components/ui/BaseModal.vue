@@ -1,15 +1,22 @@
 <template>
   <Teleport to="body">
     <Transition :name="transitionName">
-      <div v-if="open" class="fixed inset-0 z-50 flex items-center justify-center">
-        <!-- Backdrop -->
+      <div
+        v-if="open"
+        class="fixed inset-0 z-50 flex items-center justify-center"
+      >
+        <!-- Backdrop - blocks scroll/touch on the background -->
         <div
           class="absolute inset-0 bg-black/50"
           :class="{ 'md:block hidden': size === 'full' }"
-          @click="emit('close')"
+          @click="handleClose"
+          @touchstart.prevent
+          @touchmove.prevent
+          @touchend.prevent
+          @wheel.prevent
         />
 
-        <!-- Modal -->
+        <!-- Modal container -->
         <div
           class="relative bg-white dark:bg-gray-900 w-full shadow-xl border-gray-200 dark:border-gray-700"
           :class="modalClasses"
@@ -41,7 +48,7 @@
 
           <!-- Close button -->
           <button
-            @click="emit('close')"
+            @click="handleClose"
             class="absolute top-3 sm:top-4 right-3 sm:right-4 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors z-10"
           >
             <X class="w-5 h-5" />
@@ -53,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch, onUnmounted, ref } from 'vue'
+import { computed, watch, onUnmounted } from 'vue'
 import { X } from 'lucide-vue-next'
 
 type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full'
@@ -74,8 +81,6 @@ const emit = defineEmits<{
 // Modal container classes based on size
 const modalClasses = computed(() => {
   if (props.size === 'full') {
-    // Mobile: full screen, no rounded corners
-    // Desktop: large modal with rounded corners
     return [
       'h-full md:h-auto md:max-h-[90vh]',
       'md:max-w-4xl md:mx-4',
@@ -96,7 +101,7 @@ const modalClasses = computed(() => {
 // Content area classes
 const contentClasses = computed(() => {
   if (props.size === 'full') {
-    return 'p-4 sm:p-6 flex-1 overflow-y-auto'
+    return 'p-4 sm:p-6 flex-1 overflow-y-auto overscroll-contain'
   }
   return 'p-4 sm:p-6'
 })
@@ -106,43 +111,49 @@ const transitionName = computed(() => {
   return props.size === 'full' ? 'modal-full' : 'modal'
 })
 
-// Track if we pushed a history state (to avoid double-pop)
-const pushedState = ref(false)
-
-// Handle back button to close modal
-function handlePopState() {
-  if (props.open && pushedState.value) {
-    pushedState.value = false
-    emit('close')
-  }
+// Handle close from button/backdrop click
+function handleClose() {
+  emit('close')
 }
 
-// Disable body scroll when modal is open + handle history for back button
+// Save original body styles
+let originalBodyOverflow = ''
+let originalBodyPosition = ''
+let originalBodyTop = ''
+let originalBodyWidth = ''
+let scrollY = 0
+
+// Disable body scroll when modal is open
 watch(() => props.open, (isOpen) => {
   if (isOpen) {
+    // Save scroll position and lock body
+    scrollY = window.scrollY
+    originalBodyOverflow = document.body.style.overflow
+    originalBodyPosition = document.body.style.position
+    originalBodyTop = document.body.style.top
+    originalBodyWidth = document.body.style.width
+
     document.body.style.overflow = 'hidden'
-    // Push history state so back button closes modal
-    window.history.pushState({ modal: true }, '')
-    pushedState.value = true
-    window.addEventListener('popstate', handlePopState)
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.width = '100%'
   } else {
-    document.body.style.overflow = ''
-    window.removeEventListener('popstate', handlePopState)
-    // If modal closed normally (not via back button), remove the history entry
-    if (pushedState.value) {
-      pushedState.value = false
-      window.history.back()
-    }
+    // Restore body scroll
+    document.body.style.overflow = originalBodyOverflow
+    document.body.style.position = originalBodyPosition
+    document.body.style.top = originalBodyTop
+    document.body.style.width = originalBodyWidth
+    window.scrollTo(0, scrollY)
   }
 })
 
 // Cleanup on unmount
 onUnmounted(() => {
-  document.body.style.overflow = ''
-  window.removeEventListener('popstate', handlePopState)
-  if (pushedState.value) {
-    window.history.back()
-  }
+  document.body.style.overflow = originalBodyOverflow
+  document.body.style.position = originalBodyPosition
+  document.body.style.top = originalBodyTop
+  document.body.style.width = originalBodyWidth
+  window.scrollTo(0, scrollY)
 })
 </script>
 

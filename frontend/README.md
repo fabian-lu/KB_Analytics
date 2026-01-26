@@ -56,6 +56,10 @@ frontend/
 │   │   │   ├── PlayerValueCard.vue
 │   │   │   └── PlayerValueSection.vue
 │   │   │
+│   │   ├── market/              # Market page components
+│   │   │   ├── PlayerRow.vue        # Compact row for list view
+│   │   │   └── PlayerCard.vue       # Card component for grid view
+│   │   │
 │   │   ├── player/              # Player detail modal components
 │   │   │   ├── PlayerModal.vue      # Main modal with tab navigation + swipe
 │   │   │   ├── PlayerHeader.vue     # Sticky hero section (compact on mobile)
@@ -75,7 +79,7 @@ frontend/
 │   │   │       └── FormIndicator.vue # Form trend indicator
 │   │   │
 │   │   ├── ui/                  # Reusable UI components
-│   │   │   └── BaseModal.vue    # Modal wrapper (sm, md, lg, fullscreen)
+│   │   │   └── BaseModal.vue    # Modal wrapper (sm, md, lg, fullscreen, body scroll lock)
 │   │   │
 │   │   ├── SettingsModal.vue    # Settings modal (league selection)
 │   │   ├── DarkModeToggle.vue   # Sun/moon toggle
@@ -123,11 +127,13 @@ frontend/
 │   │   ├── table.ts
 │   │   ├── auth.ts
 │   │   ├── dashboard.ts
-│   │   └── player.ts        # PlayerDetail, nested types for player modal
+│   │   ├── player.ts        # PlayerDetail, nested types for player modal
+│   │   └── market.ts        # MarketPlayer, filter/sort types for market page
 │   │
 │   ├── mocks/               # Mock data for development
 │   │   ├── dashboardMock.ts # Dashboard response mock
-│   │   └── playerMock.ts    # Player detail mock (Florian Wirtz)
+│   │   ├── playerMock.ts    # Player detail mock (Florian Wirtz)
+│   │   └── marketMock.ts    # Market players (30 players) + teams for testing
 │   │
 │   ├── composables/         # Reusable stateful logic
 │   │   ├── useAuth.ts       # Auth state
@@ -723,3 +729,67 @@ onSwipeStart(e) {
   swipeStartedOnChart.value = target.tagName === 'CANVAS' || !!target.closest('canvas')
 }
 ```
+
+---
+
+## Modal Back Button Handling
+
+On mobile, the device's back button should close a modal instead of navigating away from the page.
+
+### Solution: Vue Router Navigation Guard
+
+Use `onBeforeRouteLeave` to intercept navigation when a modal is open:
+
+```typescript
+import { onBeforeRouteLeave } from 'vue-router'
+
+// In the component with the modal
+const selectedPlayerId = ref<string | null>(null)
+
+onBeforeRouteLeave((_to, _from, next) => {
+  if (selectedPlayerId.value) {
+    // Modal is open - close it instead of navigating
+    selectedPlayerId.value = null
+    next(false) // Cancel navigation
+  } else {
+    next() // Allow navigation
+  }
+})
+```
+
+### Why Not History API?
+
+Several approaches were tried:
+- `history.pushState()` / `popstate` - conflicts with Vue Router's own history management
+- Hash-based routing (`#modal`) - works but adds hashes to URLs
+- `history.forward()` - unreliable with Vue Router
+
+The navigation guard approach is the cleanest solution because:
+- Works with Vue Router instead of against it
+- No URL changes or hash fragments
+- Modal closes naturally like clicking the X button
+
+### Body Scroll Lock
+
+`BaseModal.vue` locks body scroll when open to prevent background content from scrolling:
+
+```typescript
+watch(() => props.open, (isOpen) => {
+  if (isOpen) {
+    scrollY = window.scrollY
+    document.body.style.overflow = 'hidden'
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.width = '100%'
+  } else {
+    // Restore original styles and scroll position
+    document.body.style.overflow = originalBodyOverflow
+    document.body.style.position = originalBodyPosition
+    document.body.style.top = originalBodyTop
+    document.body.style.width = originalBodyWidth
+    window.scrollTo(0, scrollY)
+  }
+})
+```
+
+Touch events on the backdrop are also prevented to avoid accidental scrolling on mobile.
