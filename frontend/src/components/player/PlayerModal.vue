@@ -25,14 +25,16 @@
       <!-- Tab Content with Swipe -->
       <div
         ref="swipeContainer"
-        class="flex-1 overflow-y-auto -mx-4 sm:-mx-6 px-4 sm:px-6"
+        class="flex-1 overflow-y-auto -mx-4 sm:-mx-6 px-4 sm:px-6 relative"
       >
-        <OverviewTab v-if="activeTab === 'overview'" :player="player" />
-        <StatsTab v-if="activeTab === 'stats'" :player="player" />
-        <ValueTab v-if="activeTab === 'value'" :player="player" />
-        <CompareTab v-if="activeTab === 'compare'" :player="player" />
-        <HistoryTab v-if="activeTab === 'history'" :player="player" />
-        <NewsTab v-if="activeTab === 'news'" :player="player" />
+        <Transition :name="slideDirection">
+          <OverviewTab v-if="activeTab === 'overview'" :key="'overview'" :player="player" />
+          <StatsTab v-else-if="activeTab === 'stats'" :key="'stats'" :player="player" />
+          <ValueTab v-else-if="activeTab === 'value'" :key="'value'" :player="player" />
+          <CompareTab v-else-if="activeTab === 'compare'" :key="'compare'" :player="player" />
+          <HistoryTab v-else-if="activeTab === 'history'" :key="'history'" :player="player" />
+          <NewsTab v-else-if="activeTab === 'news'" :key="'news'" :player="player" />
+        </Transition>
       </div>
     </div>
 
@@ -86,6 +88,7 @@ const error = ref<string | null>(null)
 const activeTab = ref('overview')
 const swipeContainer = ref<HTMLElement | null>(null)
 const tabRefs = ref<Record<string, HTMLElement | null>>({})
+const slideDirection = ref<'slide-left' | 'slide-right'>('slide-left')
 
 const tabs = [
   { id: 'overview', labelKey: 'player.tabs.overview' },
@@ -108,6 +111,8 @@ const currentIndex = computed(() => {
 
 function navigateToTab(index: number) {
   if (index >= 0 && index < tabs.length && index !== currentIndex.value) {
+    // Set slide direction based on navigation direction
+    slideDirection.value = index > currentIndex.value ? 'slide-left' : 'slide-right'
     activeTab.value = tabs[index].id
     nextTick(scrollActiveTabIntoView)
   }
@@ -180,5 +185,45 @@ watch(
 }
 .scrollbar-none::-webkit-scrollbar {
   display: none;
+}
+
+/* Slide left (next tab) */
+.slide-left-enter-active {
+  transition: all 0.25s ease-out;
+}
+.slide-left-leave-active {
+  transition: all 0.25s ease-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.slide-left-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.slide-left-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+/* Slide right (previous tab) */
+.slide-right-enter-active {
+  transition: all 0.25s ease-out;
+}
+.slide-right-leave-active {
+  transition: all 0.25s ease-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.slide-right-enter-from {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+.slide-right-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
 }
 </style>
