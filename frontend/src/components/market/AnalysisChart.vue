@@ -193,6 +193,8 @@ import { useI18n } from 'vue-i18n'
 import { Search, X } from 'lucide-vue-next'
 import {
   Chart as ChartJS,
+  ScatterController,
+  LineController,
   LinearScale,
   PointElement,
   LineElement,
@@ -202,7 +204,7 @@ import {
 import type { MarketPlayer } from '@/types/market'
 import type { ChartDataPoint } from '@/types/analysis'
 
-ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend)
+ChartJS.register(ScatterController, LineController, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
 const props = defineProps<{
   players: MarketPlayer[]
