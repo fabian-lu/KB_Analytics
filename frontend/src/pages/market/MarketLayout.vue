@@ -47,12 +47,12 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSwipe } from '@vueuse/core'
 import {
-  LayoutGrid,
   Users,
-  ArrowLeftRight,
-  UserPlus,
-  Star,
-  TrendingUp
+  BarChart3,
+  GitCompare,
+  Calendar,
+  Trophy,
+  Star
 } from 'lucide-vue-next'
 
 const route = useRoute()
@@ -65,12 +65,12 @@ const tabRefs = ref<Record<string, HTMLElement | null>>({})
 const slideDirection = ref<'slide-left' | 'slide-right'>('slide-left')
 
 const tabs = [
-  { key: 'overview', path: '/market/overview', icon: LayoutGrid },
   { key: 'players', path: '/market/players', icon: Users },
-  { key: 'transfers', path: '/market/transfers', icon: ArrowLeftRight },
-  { key: 'freeAgents', path: '/market/free-agents', icon: UserPlus },
+  { key: 'analysis', path: '/market/analysis', icon: BarChart3 },
+  { key: 'compare', path: '/market/compare', icon: GitCompare },
+  { key: 'matchups', path: '/market/matchups', icon: Calendar },
+  { key: 'bestXI', path: '/market/best-xi', icon: Trophy },
   { key: 'watchlist', path: '/market/watchlist', icon: Star },
-  { key: 'trends', path: '/market/trends', icon: TrendingUp },
 ]
 
 function setTabRef(path: string, el: any) {

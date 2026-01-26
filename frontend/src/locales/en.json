@@ -7,12 +7,12 @@
   },
   "market": {
     "tabs": {
-      "overview": "Overview",
       "players": "Players",
-      "transfers": "Transfers",
-      "freeAgents": "Free Agents",
-      "watchlist": "Watchlist",
-      "trends": "Trends"
+      "analysis": "Analysis",
+      "compare": "Compare",
+      "matchups": "Matchups",
+      "bestXI": "Best XI",
+      "watchlist": "Watchlist"
     }
   },
   "league": {

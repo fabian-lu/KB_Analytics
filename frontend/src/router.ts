@@ -28,31 +28,31 @@ const router = createRouter({
       children: [
         {
           path: '',
-          redirect: '/market/overview',
-        },
-        {
-          path: 'overview',
-          component: () => import('./pages/market/MarketOverview.vue'),
+          redirect: '/market/players',
         },
         {
           path: 'players',
           component: () => import('./pages/market/MarketPlayers.vue'),
         },
         {
-          path: 'transfers',
-          component: () => import('./pages/market/MarketTransfers.vue'),
+          path: 'analysis',
+          component: () => import('./pages/market/MarketAnalysis.vue'),
         },
         {
-          path: 'free-agents',
-          component: () => import('./pages/market/MarketFreeAgents.vue'),
+          path: 'compare',
+          component: () => import('./pages/market/MarketCompare.vue'),
+        },
+        {
+          path: 'matchups',
+          component: () => import('./pages/market/MarketMatchups.vue'),
+        },
+        {
+          path: 'best-xi',
+          component: () => import('./pages/market/MarketBestXI.vue'),
         },
         {
           path: 'watchlist',
           component: () => import('./pages/market/MarketWatchlist.vue'),
-        },
-        {
-          path: 'trends',
-          component: () => import('./pages/market/MarketTrends.vue'),
         },
       ],
     },
