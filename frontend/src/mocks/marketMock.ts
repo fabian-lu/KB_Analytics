@@ -1,5 +1,6 @@
 import type { MarketPlayer } from '@/types/market'
 import type { PlayerStatus, FormTrend } from '@/types/player'
+import type { PlayerSummary } from '@/types/dashboard'
 
 // ============================================
 // TEAMS (for search autocomplete)
@@ -612,4 +613,182 @@ export const mockTeamMatchups: TeamMatchupData[] = [
     clean_sheet_pct: 4,
     fixtures: createFixtures('ksc'),
   },
+]
+
+// ============================================
+// BEST XI DATA (per matchday + season dream team)
+// ============================================
+
+export interface BestXIMatchday {
+  matchday: number
+  totalPoints: number
+  formation: string
+  players: PlayerSummary[]
+}
+
+/** Convert a MarketPlayer to PlayerSummary with optional matchday-specific points */
+function toPlayerSummary(p: MarketPlayer, mdPoints?: number): PlayerSummary {
+  return {
+    id: p.id,
+    name: p.name,
+    position: p.position,
+    team_id: p.team_id,
+    team_name: p.team_name,
+    team_logo: p.team_logo,
+    profile_image: p.profile_image,
+    market_value: p.market_value,
+    total_points: mdPoints ?? p.total_points,
+    avg_points: p.avg_points,
+    std_points: p.stability,
+    avg_last_3: p.form,
+    euros_per_point: p.market_value / (p.avg_points || 1),
+  }
+}
+
+// Deterministic pseudo-random for matchday point variation
+function seededPoints(base: number, matchday: number, playerId: string): number {
+  let hash = 0
+  const seed = `${playerId}-${matchday}`
+  for (let i = 0; i < seed.length; i++) {
+    hash = ((hash << 5) - hash) + seed.charCodeAt(i)
+    hash |= 0
+  }
+  // Scale between 0.3x and 1.8x of base avg
+  const factor = 0.3 + (Math.abs(hash % 150) / 100)
+  return Math.round(base * factor * 10) / 10
+}
+
+// Player pool by position for best XI selection
+const allByPosition: Record<number, MarketPlayer[]> = { 1: [], 2: [], 3: [], 4: [] }
+for (const p of mockMarketPlayers) {
+  allByPosition[p.position]?.push(p)
+}
+
+function generateBestXI(matchday: number): BestXIMatchday {
+  // Score each player for this matchday
+  const scored = mockMarketPlayers.map(p => ({
+    player: p,
+    mdPoints: seededPoints(p.avg_points, matchday, p.id),
+  }))
+
+  // Pick best per position: 1 GK, best combo of DF/MF/FW summing to 10
+  const byPos: Record<number, { player: MarketPlayer; mdPoints: number }[]> = { 1: [], 2: [], 3: [], 4: [] }
+  for (const s of scored) {
+    byPos[s.player.position]?.push(s)
+  }
+  for (const pos of [1, 2, 3, 4]) {
+    byPos[pos].sort((a, b) => b.mdPoints - a.mdPoints)
+  }
+
+  // Use allowed formations and pick the one with highest total
+  const formations = [
+    { df: 3, mf: 4, fw: 3 },
+    { df: 3, mf: 5, fw: 2 },
+    { df: 4, mf: 3, fw: 3 },
+    { df: 4, mf: 4, fw: 2 },
+    { df: 4, mf: 5, fw: 1 },
+    { df: 5, mf: 3, fw: 2 },
+    { df: 5, mf: 4, fw: 1 },
+  ]
+
+  let bestFormation = formations[0]
+  let bestTotal = 0
+  let bestPicks: { player: MarketPlayer; mdPoints: number }[] = []
+
+  for (const f of formations) {
+    const picks = [
+      byPos[1][0],
+      ...byPos[2].slice(0, f.df),
+      ...byPos[3].slice(0, f.mf),
+      ...byPos[4].slice(0, f.fw),
+    ]
+    const total = picks.reduce((s, p) => s + p.mdPoints, 0)
+    if (total > bestTotal) {
+      bestTotal = total
+      bestFormation = f
+      bestPicks = picks
+    }
+  }
+
+  return {
+    matchday,
+    totalPoints: Math.round(bestTotal * 10) / 10,
+    formation: `${bestFormation.df}-${bestFormation.mf}-${bestFormation.fw}`,
+    players: bestPicks.map(p => toPlayerSummary(p.player, p.mdPoints)),
+  }
+}
+
+// Generate best XI for matchdays 1-18
+export const mockBestXIByMatchday: BestXIMatchday[] = Array.from(
+  { length: 18 },
+  (_, i) => generateBestXI(i + 1)
+)
+
+// Season dream team: best 11 by season avg points (best formation)
+function generateSeasonDreamTeam(): BestXIMatchday {
+  const scored = mockMarketPlayers.map(p => ({
+    player: p,
+    mdPoints: p.avg_points,
+  }))
+
+  const byPos: Record<number, { player: MarketPlayer; mdPoints: number }[]> = { 1: [], 2: [], 3: [], 4: [] }
+  for (const s of scored) {
+    byPos[s.player.position]?.push(s)
+  }
+  for (const pos of [1, 2, 3, 4]) {
+    byPos[pos].sort((a, b) => b.mdPoints - a.mdPoints)
+  }
+
+  const formations = [
+    { df: 3, mf: 4, fw: 3 },
+    { df: 3, mf: 5, fw: 2 },
+    { df: 4, mf: 3, fw: 3 },
+    { df: 4, mf: 4, fw: 2 },
+    { df: 4, mf: 5, fw: 1 },
+    { df: 5, mf: 3, fw: 2 },
+    { df: 5, mf: 4, fw: 1 },
+  ]
+
+  let bestFormation = formations[0]
+  let bestTotal = 0
+  let bestPicks: { player: MarketPlayer; mdPoints: number }[] = []
+
+  for (const f of formations) {
+    const picks = [
+      byPos[1][0],
+      ...byPos[2].slice(0, f.df),
+      ...byPos[3].slice(0, f.mf),
+      ...byPos[4].slice(0, f.fw),
+    ]
+    const total = picks.reduce((s, p) => s + p.mdPoints, 0)
+    if (total > bestTotal) {
+      bestTotal = total
+      bestFormation = f
+      bestPicks = picks
+    }
+  }
+
+  return {
+    matchday: 0, // 0 = season
+    totalPoints: Math.round(bestTotal * 10) / 10,
+    formation: `${bestFormation.df}-${bestFormation.mf}-${bestFormation.fw}`,
+    players: bestPicks.map(p => toPlayerSummary(p.player, p.mdPoints)),
+  }
+}
+
+export const mockSeasonDreamTeam: BestXIMatchday = generateSeasonDreamTeam()
+
+// Mock "your" lineup for comparison (subset of mock players)
+export const mockUserLineup: PlayerSummary[] = [
+  toPlayerSummary(mockMarketPlayers.find(p => p.id === 'gk-kobel')!),
+  toPlayerSummary(mockMarketPlayers.find(p => p.id === 'df-frimpong')!),
+  toPlayerSummary(mockMarketPlayers.find(p => p.id === 'df-tah')!),
+  toPlayerSummary(mockMarketPlayers.find(p => p.id === 'df-schlotterbeck')!),
+  toPlayerSummary(mockMarketPlayers.find(p => p.id === 'df-raum')!),
+  toPlayerSummary(mockMarketPlayers.find(p => p.id === 'mf1')!),     // Wirtz
+  toPlayerSummary(mockMarketPlayers.find(p => p.id === 'mf-musiala')!),
+  toPlayerSummary(mockMarketPlayers.find(p => p.id === 'mf-brandt')!),
+  toPlayerSummary(mockMarketPlayers.find(p => p.id === 'mf-grimaldo')!),
+  toPlayerSummary(mockMarketPlayers.find(p => p.id === 'fw1')!),     // Kane
+  toPlayerSummary(mockMarketPlayers.find(p => p.id === 'fw-boniface')!),
 ]

@@ -83,8 +83,15 @@ frontend/
 │   │   │       ├── FixtureRow.vue   # Upcoming match row
 │   │   │       └── FormIndicator.vue # Form trend indicator
 │   │   │
+│   │   ├── lineup/              # Reusable lineup components (Dashboard + Best XI)
+│   │   │   ├── LineupPitch.vue      # Football pitch with position rows, drag & drop
+│   │   │   ├── LineupStats.vue      # Formation, points, value, efficiency stats
+│   │   │   ├── PlayerChip.vue       # Player chip for pitch display
+│   │   │   └── StatBox.vue          # Compact stat with icon and tooltip
+│   │   │
 │   │   ├── ui/                  # Reusable UI components
-│   │   │   └── BaseModal.vue    # Modal wrapper (sm, md, lg, fullscreen, body scroll lock)
+│   │   │   ├── BaseModal.vue    # Modal wrapper (sm, md, lg, fullscreen, body scroll lock)
+│   │   │   └── ConfirmModal.vue # Confirmation dialog (built on BaseModal)
 │   │   │
 │   │   ├── SettingsModal.vue    # Settings modal (league selection)
 │   │   ├── DarkModeToggle.vue   # Sun/moon toggle
@@ -96,12 +103,12 @@ frontend/
 │   │   │
 │   │   ├── market/              # Market section (nested routes)
 │   │   │   ├── MarketLayout.vue     # Layout with secondary nav + swipe
-│   │   │   ├── MarketPlayers.vue    # Player database with filters
-│   │   │   ├── MarketAnalysis.vue   # Charts, trends, similar players
-│   │   │   ├── MarketCompare.vue
-│   │   │   ├── MarketMatchups.vue
-│   │   │   ├── MarketBestXI.vue
-│   │   │   └── MarketWatchlist.vue
+│   │   │   ├── MarketPlayers.vue    # Player database with filters/search/views
+│   │   │   ├── MarketAnalysis.vue   # Charts, trends, similar players, breakout candidates
+│   │   │   ├── MarketCompare.vue    # Multi-player comparison with radar chart
+│   │   │   ├── MarketMatchups.vue   # Fixture difficulty, vulnerability, clean sheets
+│   │   │   ├── MarketBestXI.vue     # Dream team by matchday/season with compare
+│   │   │   └── MarketWatchlist.vue  # Tracked players with notes + similar suggestions
 │   │   │
 │   │   ├── league/              # League section (nested routes)
 │   │   │   ├── LeagueLayout.vue
@@ -805,3 +812,114 @@ watch(() => props.open, (isOpen) => {
 ```
 
 Touch events on the backdrop are also prevented to avoid accidental scrolling on mobile.
+
+---
+
+## Confirmation Dialogs
+
+`ConfirmModal.vue` is a reusable confirmation dialog built on `BaseModal`:
+
+### Usage
+
+```vue
+<template>
+  <button @click="showConfirm = true">Delete All</button>
+
+  <ConfirmModal
+    :open="showConfirm"
+    :title="t('watchlist.clearConfirmTitle')"
+    :message="t('watchlist.clearConfirmMessage')"
+    @close="showConfirm = false"
+    @confirm="handleConfirm(); showConfirm = false"
+  />
+</template>
+
+<script setup lang="ts">
+import ConfirmModal from '@/components/ui/ConfirmModal.vue'
+const showConfirm = ref(false)
+
+function handleConfirm() {
+  // Do the destructive action
+}
+</script>
+```
+
+### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | boolean | required | Controls modal visibility |
+| `title` | string | required | Modal title (question) |
+| `message` | string | required | Explanation text |
+| `confirmLabel` | string | `t('confirm.confirm')` | Confirm button text |
+| `confirmClass` | string | `'bg-red-500 hover:bg-red-600'` | Tailwind classes for confirm button |
+
+### Events
+
+| Event | Description |
+|-------|-------------|
+| `close` | User clicked cancel or backdrop |
+| `confirm` | User clicked confirm |
+
+---
+
+## Lineup Components
+
+Reusable components in `components/lineup/` for displaying football formations. Used by both Dashboard and Market > Best XI.
+
+### LineupPitch
+
+Renders a football pitch with players positioned by role:
+
+```vue
+<LineupPitch
+  :starting-g-k="goalkeepers"
+  :starting-d-f="defenders"
+  :starting-m-f="midfielders"
+  :starting-f-w="forwards"
+  :readonly="true"
+  :highlight-player-ids="['player-1', 'player-2']"
+/>
+```
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `startingGK` | `PlayerSummary[]` | Goalkeepers to display |
+| `startingDF` | `PlayerSummary[]` | Defenders to display |
+| `startingMF` | `PlayerSummary[]` | Midfielders to display |
+| `startingFW` | `PlayerSummary[]` | Forwards to display |
+| `readonly` | boolean | If false, enables drag & drop |
+| `highlightPlayerIds` | `string[]` | Player IDs to highlight with a ring |
+
+### LineupStats
+
+Stats bar showing lineup metrics:
+
+```vue
+<LineupStats :players="allPlayers" :formation="'4-3-3'" />
+```
+
+Displays: Formation, Total Points, Avg Points, Value, Efficiency (pts/€M), Consistency (σ), Teams.
+
+### PlayerChip
+
+Individual player display on the pitch:
+
+```vue
+<PlayerChip :player="player" :readonly="true" :highlight="true" />
+```
+
+Shows player photo, name, and points badge. Highlight adds a cyan ring.
+
+### StatBox
+
+Compact stat display with tooltip:
+
+```vue
+<StatBox
+  :icon="TrophyIcon"
+  value="4-3-3"
+  :label="t('lineup.formation')"
+  :description="t('lineup.formationDesc')"
+/>
+```

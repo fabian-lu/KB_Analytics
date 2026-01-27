@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-wrap gap-2 justify-center">
     <StatBox :label="t('lineup.formation')" :tooltip="t('lineup.formationDesc')">
-      {{ formation || '—' }}
+      {{ formation || '---' }}
     </StatBox>
 
     <StatBox :label="t('lineup.totalPoints')" :tooltip="t('lineup.totalPointsDesc')">
@@ -21,7 +21,7 @@
     </StatBox>
 
     <StatBox :label="t('lineup.consistency')" :tooltip="t('lineup.consistencyDesc')">
-      ± {{ stdDeviation.toFixed(1) }}
+      &plusmn; {{ stdDeviation.toFixed(1) }}
     </StatBox>
 
     <StatBox :label="t('lineup.recentForm')" :tooltip="t('lineup.recentFormDesc')" :value-class="formColor">
@@ -63,7 +63,7 @@ const totalValue = computed(() => {
   return props.players.reduce((sum, p) => sum + p.market_value, 0)
 })
 
-// Points per €M (efficiency)
+// Points per million (efficiency)
 const efficiency = computed(() => {
   if (totalValue.value === 0) return 0
   return totalPoints.value / (totalValue.value / 1_000_000)
@@ -102,8 +102,8 @@ const teamCount = computed(() => {
 
 function formatMoney(value: number) {
   if (value >= 1_000_000) {
-    return `${(value / 1_000_000).toFixed(1)}M €`
+    return `${(value / 1_000_000).toFixed(1)}M \u20AC`
   }
-  return `${value.toLocaleString()} €`
+  return `${value.toLocaleString()} \u20AC`
 }
 </script>

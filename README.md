@@ -242,9 +242,16 @@ The tracking script is in `frontend/index.html`.
 - [x] Player detail modal (6 tabs: overview, stats, value, compare, history, news)
 - [x] Page structure with nested routes (Market, League, Insights subpages)
 - [x] Mobile swipe navigation between subpages
+- [x] Market > Players (search, filters, list/card views)
+- [x] Market > Analysis (scatter plot, regressions, similar players, form trends)
+- [x] Market > Compare (multi-player radar chart comparison)
+- [x] Market > Matchups (fixture difficulty, vulnerability, clean sheets)
+- [x] Market > Best XI (dream team by matchday/season, compare to yours)
+- [x] Market > Watchlist (track players, notes, similar suggestions)
+- [x] Reusable lineup components (pitch, stats, shared by Dashboard + Best XI)
 - [ ] Dashboard backend (update endpoint to match new types)
-- [ ] Lineup drag & drop system
-- [ ] Build out subpage content (Market, League, Insights)
+- [ ] Lineup drag & drop system (components ready, need to wire up)
+- [ ] Build out League and Insights subpages
 - [ ] ML predictions
 - [ ] Lineup optimizer
 

@@ -44,9 +44,9 @@
 import { ref, computed, watch, provide } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { DashboardLineup, PlayerSummary } from '@/types/dashboard'
-import LineupPitch from './LineupPitch.vue'
+import LineupPitch from '@/components/lineup/LineupPitch.vue'
 import LineupBench from './LineupBench.vue'
-import LineupStats from './LineupStats.vue'
+import LineupStats from '@/components/lineup/LineupStats.vue'
 
 const props = defineProps<{
   lineup: DashboardLineup

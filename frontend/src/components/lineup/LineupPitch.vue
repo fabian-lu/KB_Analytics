@@ -50,83 +50,135 @@
 
     <!-- FW Row -->
     <div class="absolute left-0 right-0 flex justify-center gap-1 lg:gap-2 px-2" style="top: 18%; transform: translateY(-50%)">
-      <VueDraggable
-        v-model="localFW"
-        group="lineup"
-        :animation="150"
-        :delay="100"
-        :delay-on-touch-only="true"
-        :touch-start-threshold="5"
-        class="flex justify-center gap-1 lg:gap-2 min-h-[50px] min-w-[60px]"
-        ghost-class="opacity-40"
-        drag-class="scale-110"
-        :move="onMove"
-      >
-        <PlayerChip v-for="player in localFW" :key="player.id" :player="player" />
-      </VueDraggable>
+      <template v-if="readonly">
+        <div class="flex justify-center gap-1 lg:gap-2 min-h-[50px] min-w-[60px]">
+          <PlayerChip
+            v-for="player in localFW"
+            :key="player.id"
+            :player="player"
+            :readonly="true"
+            :highlight="highlightIds.has(player.id)"
+          />
+        </div>
+      </template>
+      <template v-else>
+        <VueDraggable
+          v-model="localFW"
+          group="lineup"
+          :animation="150"
+          :delay="100"
+          :delay-on-touch-only="true"
+          :touch-start-threshold="5"
+          class="flex justify-center gap-1 lg:gap-2 min-h-[50px] min-w-[60px]"
+          ghost-class="opacity-40"
+          drag-class="scale-110"
+          :move="onMove"
+        >
+          <PlayerChip v-for="player in localFW" :key="player.id" :player="player" />
+        </VueDraggable>
+      </template>
       <div v-if="localFW.length === 0" class="text-white/40 text-xs self-center">FW</div>
     </div>
 
     <!-- MF Row -->
     <div class="absolute left-0 right-0 flex justify-center gap-1 lg:gap-2 px-2" style="top: 42%; transform: translateY(-50%)">
-      <VueDraggable
-        v-model="localMF"
-        group="lineup"
-        :animation="150"
-        :delay="100"
-        :delay-on-touch-only="true"
-        :touch-start-threshold="5"
-        class="flex justify-center gap-1 lg:gap-2 min-h-[50px] min-w-[60px]"
-        ghost-class="opacity-40"
-        drag-class="scale-110"
-        :move="onMove"
-      >
-        <PlayerChip v-for="player in localMF" :key="player.id" :player="player" />
-      </VueDraggable>
+      <template v-if="readonly">
+        <div class="flex justify-center gap-1 lg:gap-2 min-h-[50px] min-w-[60px]">
+          <PlayerChip
+            v-for="player in localMF"
+            :key="player.id"
+            :player="player"
+            :readonly="true"
+            :highlight="highlightIds.has(player.id)"
+          />
+        </div>
+      </template>
+      <template v-else>
+        <VueDraggable
+          v-model="localMF"
+          group="lineup"
+          :animation="150"
+          :delay="100"
+          :delay-on-touch-only="true"
+          :touch-start-threshold="5"
+          class="flex justify-center gap-1 lg:gap-2 min-h-[50px] min-w-[60px]"
+          ghost-class="opacity-40"
+          drag-class="scale-110"
+          :move="onMove"
+        >
+          <PlayerChip v-for="player in localMF" :key="player.id" :player="player" />
+        </VueDraggable>
+      </template>
       <div v-if="localMF.length === 0" class="text-white/40 text-xs self-center">MF</div>
     </div>
 
     <!-- DF Row -->
     <div class="absolute left-0 right-0 flex justify-center gap-1 lg:gap-2 px-2" style="top: 66%; transform: translateY(-50%)">
-      <VueDraggable
-        v-model="localDF"
-        group="lineup"
-        :animation="150"
-        :delay="100"
-        :delay-on-touch-only="true"
-        :touch-start-threshold="5"
-        class="flex justify-center gap-1 lg:gap-2 min-h-[50px] min-w-[60px]"
-        ghost-class="opacity-40"
-        drag-class="scale-110"
-        :move="onMove"
-      >
-        <PlayerChip v-for="player in localDF" :key="player.id" :player="player" />
-      </VueDraggable>
+      <template v-if="readonly">
+        <div class="flex justify-center gap-1 lg:gap-2 min-h-[50px] min-w-[60px]">
+          <PlayerChip
+            v-for="player in localDF"
+            :key="player.id"
+            :player="player"
+            :readonly="true"
+            :highlight="highlightIds.has(player.id)"
+          />
+        </div>
+      </template>
+      <template v-else>
+        <VueDraggable
+          v-model="localDF"
+          group="lineup"
+          :animation="150"
+          :delay="100"
+          :delay-on-touch-only="true"
+          :touch-start-threshold="5"
+          class="flex justify-center gap-1 lg:gap-2 min-h-[50px] min-w-[60px]"
+          ghost-class="opacity-40"
+          drag-class="scale-110"
+          :move="onMove"
+        >
+          <PlayerChip v-for="player in localDF" :key="player.id" :player="player" />
+        </VueDraggable>
+      </template>
       <div v-if="localDF.length === 0" class="text-white/40 text-xs self-center">DF</div>
     </div>
 
     <!-- GK Row -->
     <div class="absolute left-0 right-0 flex justify-center" style="top: 88%; transform: translateY(-50%)">
-      <VueDraggable
-        v-model="localGK"
-        group="lineup"
-        :animation="150"
-        :delay="100"
-        :delay-on-touch-only="true"
-        :touch-start-threshold="5"
-        class="flex justify-center gap-1 lg:gap-2 min-h-[50px] min-w-[60px]"
-        ghost-class="opacity-40"
-        drag-class="scale-110"
-        :move="onMove"
-      >
-        <PlayerChip v-for="player in localGK" :key="player.id" :player="player" />
-      </VueDraggable>
+      <template v-if="readonly">
+        <div class="flex justify-center gap-1 lg:gap-2 min-h-[50px] min-w-[60px]">
+          <PlayerChip
+            v-for="player in localGK"
+            :key="player.id"
+            :player="player"
+            :readonly="true"
+            :highlight="highlightIds.has(player.id)"
+          />
+        </div>
+      </template>
+      <template v-else>
+        <VueDraggable
+          v-model="localGK"
+          group="lineup"
+          :animation="150"
+          :delay="100"
+          :delay-on-touch-only="true"
+          :touch-start-threshold="5"
+          class="flex justify-center gap-1 lg:gap-2 min-h-[50px] min-w-[60px]"
+          ghost-class="opacity-40"
+          drag-class="scale-110"
+          :move="onMove"
+        >
+          <PlayerChip v-for="player in localGK" :key="player.id" :player="player" />
+        </VueDraggable>
+      </template>
       <div v-if="localGK.length === 0" class="text-white/40 text-xs self-center">GK</div>
     </div>
 
-    <!-- Drop feedback overlay -->
+    <!-- Drop feedback overlay (only in interactive mode) -->
     <div
-      v-if="validationMessage"
+      v-if="!readonly && validationMessage"
       class="absolute inset-0 flex items-center justify-center pointer-events-none"
     >
       <div
@@ -145,12 +197,17 @@ import { VueDraggable } from 'vue-draggable-plus'
 import type { PlayerSummary } from '@/types/dashboard'
 import PlayerChip from './PlayerChip.vue'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   startingGK: PlayerSummary[]
   startingDF: PlayerSummary[]
   startingMF: PlayerSummary[]
   startingFW: PlayerSummary[]
-}>()
+  readonly?: boolean
+  highlightPlayerIds?: string[]
+}>(), {
+  readonly: false,
+  highlightPlayerIds: () => [],
+})
 
 const emit = defineEmits<{
   'update:startingGK': [players: PlayerSummary[]]
@@ -159,8 +216,10 @@ const emit = defineEmits<{
   'update:startingFW': [players: PlayerSummary[]]
 }>()
 
-// Inject validation from parent
-const dragValidation = inject<(player: PlayerSummary) => { allowed: boolean; reason: string }>('dragValidation')
+const highlightIds = computed(() => new Set(props.highlightPlayerIds))
+
+// Inject validation from parent (only used in interactive mode)
+const dragValidation = inject<((player: PlayerSummary) => { allowed: boolean; reason: string }) | undefined>('dragValidation', undefined)
 
 // Local state that syncs with props
 const localGK = ref<PlayerSummary[]>([...props.startingGK])
@@ -174,23 +233,23 @@ watch(() => props.startingDF, (val) => { localDF.value = [...val] }, { deep: tru
 watch(() => props.startingMF, (val) => { localMF.value = [...val] }, { deep: true })
 watch(() => props.startingFW, (val) => { localFW.value = [...val] }, { deep: true })
 
-// Sync local -> parent (emit updates)
-watch(localGK, (val) => { emit('update:startingGK', val as PlayerSummary[]) }, { deep: true })
-watch(localDF, (val) => { emit('update:startingDF', val as PlayerSummary[]) }, { deep: true })
-watch(localMF, (val) => { emit('update:startingMF', val as PlayerSummary[]) }, { deep: true })
-watch(localFW, (val) => { emit('update:startingFW', val as PlayerSummary[]) }, { deep: true })
+// Sync local -> parent (emit updates) - only in interactive mode
+watch(localGK, (val) => { if (!props.readonly) emit('update:startingGK', val as PlayerSummary[]) }, { deep: true })
+watch(localDF, (val) => { if (!props.readonly) emit('update:startingDF', val as PlayerSummary[]) }, { deep: true })
+watch(localMF, (val) => { if (!props.readonly) emit('update:startingMF', val as PlayerSummary[]) }, { deep: true })
+watch(localFW, (val) => { if (!props.readonly) emit('update:startingFW', val as PlayerSummary[]) }, { deep: true })
 
-// Visual feedback state
+// Visual feedback state (only used in interactive mode)
 const isValidDrop = ref(true)
 const validationMessage = ref('')
 
 // Pitch styling (ring when dragging)
 const pitchClass = computed(() => {
-  if (!validationMessage.value) return ''
+  if (props.readonly || !validationMessage.value) return ''
   return isValidDrop.value ? 'ring-4 ring-green-400' : 'ring-4 ring-red-400'
 })
 
-// Validate move - called during drag
+// Validate move - called during drag (only in interactive mode)
 function onMove(evt: any): boolean {
   const player = evt.draggedContext?.element as PlayerSummary
   if (!player) return false

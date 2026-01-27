@@ -85,6 +85,10 @@
     "error": "An error occurred",
     "retry": "Retry"
   },
+  "confirm": {
+    "cancel": "Cancel",
+    "confirm": "Confirm"
+  },
   "settings": {
     "selectLeague": "Select League"
   },
@@ -427,5 +431,44 @@
     "today": "Today",
     "yesterday": "Yesterday",
     "daysAgo": "{days} days ago"
+  },
+  "bestXI": {
+    "title": "Best XI",
+    "byMatchday": "By Matchday",
+    "seasonDreamTeam": "Season Dream Team",
+    "matchday": "Matchday",
+    "matchdayNum": "Matchday {num}",
+    "selectMatchday": "Select matchday",
+    "totalPoints": "Total Points",
+    "formation": "Formation",
+    "bestAtPosition": "Best at position",
+    "compareToYours": "Compare to Your XI",
+    "yourXI": "Your XI",
+    "bestXI": "Best XI",
+    "difference": "Difference",
+    "pointsDiff": "{diff} pts",
+    "noData": "No data for this matchday",
+    "seasonBest": "Best average points per matchday across the entire season",
+    "matchdayBest": "The optimal 11 players for this matchday",
+    "youHave": "You have {count} of these players"
+  },
+  "watchlist": {
+    "title": "Watchlist",
+    "empty": "Your watchlist is empty",
+    "emptyDesc": "Add players from the Players tab to track them here",
+    "addPlayer": "Add players...",
+    "removePlayer": "Remove from watchlist",
+    "notes": "Notes",
+    "notesPlaceholder": "Add your notes about this player...",
+    "similarPlayers": "Similar Players",
+    "cheaperOnly": "Cheaper only",
+    "showAll": "Show all",
+    "playersWatched": "{count} players watched",
+    "addedToWatchlist": "Added to watchlist",
+    "removedFromWatchlist": "Removed from watchlist",
+    "clearAll": "Clear all",
+    "goToPlayers": "Go to Players",
+    "clearConfirmTitle": "Clear watchlist?",
+    "clearConfirmMessage": "All watched players and notes will be removed. This cannot be undone."
   }
 }

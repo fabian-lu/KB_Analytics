@@ -85,6 +85,10 @@
     "error": "Ein Fehler ist aufgetreten",
     "retry": "Erneut versuchen"
   },
+  "confirm": {
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen"
+  },
   "settings": {
     "selectLeague": "Liga auswählen"
   },
@@ -427,5 +431,44 @@
     "today": "Heute",
     "yesterday": "Gestern",
     "daysAgo": "vor {days} Tagen"
+  },
+  "bestXI": {
+    "title": "Beste XI",
+    "byMatchday": "Nach Spieltag",
+    "seasonDreamTeam": "Saison-Traumelf",
+    "matchday": "Spieltag",
+    "matchdayNum": "Spieltag {num}",
+    "selectMatchday": "Spieltag auswählen",
+    "totalPoints": "Gesamtpunkte",
+    "formation": "Formation",
+    "bestAtPosition": "Bester auf Position",
+    "compareToYours": "Vergleich mit deiner XI",
+    "yourXI": "Deine XI",
+    "bestXI": "Beste XI",
+    "difference": "Differenz",
+    "pointsDiff": "{diff} Pkt",
+    "noData": "Keine Daten für diesen Spieltag",
+    "seasonBest": "Beste Ø-Punkte pro Spieltag über die gesamte Saison",
+    "matchdayBest": "Die optimalen 11 Spieler für diesen Spieltag",
+    "youHave": "Du hast {count} dieser Spieler"
+  },
+  "watchlist": {
+    "title": "Merkliste",
+    "empty": "Deine Merkliste ist leer",
+    "emptyDesc": "Füge Spieler vom Spieler-Tab hinzu, um sie hier zu verfolgen",
+    "addPlayer": "Spieler hinzufügen...",
+    "removePlayer": "Von Merkliste entfernen",
+    "notes": "Notizen",
+    "notesPlaceholder": "Notizen zu diesem Spieler hinzufügen...",
+    "similarPlayers": "Ähnliche Spieler",
+    "cheaperOnly": "Nur günstigere",
+    "showAll": "Alle anzeigen",
+    "playersWatched": "{count} Spieler beobachtet",
+    "addedToWatchlist": "Zur Merkliste hinzugefügt",
+    "removedFromWatchlist": "Von Merkliste entfernt",
+    "clearAll": "Alle löschen",
+    "goToPlayers": "Zu Spielern",
+    "clearConfirmTitle": "Watchlist leeren?",
+    "clearConfirmMessage": "Alle beobachteten Spieler und Notizen werden entfernt. Dies kann nicht rückgängig gemacht werden."
   }
 }

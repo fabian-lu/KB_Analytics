@@ -12,11 +12,11 @@
     </span>
 
     <!-- Avatar + team logo -->
-    <div class="relative flex-shrink-0">
+    <div class="relative flex-shrink-0 group/avatar cursor-pointer" @click.stop="$emit('imageClick')">
       <img
         :src="player.profile_image"
         :alt="player.name"
-        class="w-9 h-9 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full object-cover bg-gray-200 dark:bg-gray-700"
+        class="w-9 h-9 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full object-cover bg-gray-200 dark:bg-gray-700 transition-transform duration-150 group-hover/avatar:scale-110 group-hover/avatar:ring-2 group-hover/avatar:ring-cyan-400"
       />
       <img
         :src="player.team_logo"
@@ -109,6 +109,7 @@ const props = defineProps<{
 
 defineEmits<{
   click: []
+  imageClick: []
 }>()
 
 const { t } = useI18n()
