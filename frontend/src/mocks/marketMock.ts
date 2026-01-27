@@ -403,3 +403,213 @@ export const mockMarketPlayers: MarketPlayer[] = [
     isSetPieceTaker: true,
   }),
 ]
+
+// ============================================
+// MATCHUP DATA (fixtures, vulnerability, clean sheets)
+// ============================================
+
+export interface Fixture {
+  matchday: number
+  opponent_id: string
+  opponent_name: string
+  opponent_short: string
+  opponent_logo: string
+  is_home: boolean
+  difficulty: number // 1 (easy) to 5 (hard)
+}
+
+export interface TeamMatchupData {
+  team_id: string
+  team_name: string
+  team_short: string
+  team_logo: string
+  // Points conceded to positions (avg per game)
+  points_conceded_def: number
+  points_conceded_mid: number
+  points_conceded_fwd: number
+  // Clean sheet probability (0-100%)
+  clean_sheet_pct: number
+  // Next 5 fixtures
+  fixtures: Fixture[]
+}
+
+// Difficulty ratings: 1=very easy, 2=easy, 3=medium, 4=hard, 5=very hard
+function getTeamDifficulty(teamId: string): number {
+  const ratings: Record<string, number> = {
+    'fcb': 5, 'b04': 5, 'bvb': 4, 'rbl': 4, 'vfb': 3,
+    'sge': 3, 'scf': 3, 'tsg': 3, 'wob': 3, 'bmg': 3,
+    'svw': 2, 'fcu': 2, 'fca': 2, 'm05': 2, 'boc': 1,
+    'hei': 1, 'fch': 1, 'ksc': 1,
+  }
+  return ratings[teamId] ?? 3
+}
+
+function createFixtures(teamId: string): Fixture[] {
+  // Simplified schedule - each team gets 5 upcoming opponents
+  const schedules: Record<string, Array<{ opp: string; home: boolean }>> = {
+    'fcb': [{ opp: 'boc', home: true }, { opp: 'bvb', home: false }, { opp: 'scf', home: true }, { opp: 'rbl', home: false }, { opp: 'svw', home: true }],
+    'bvb': [{ opp: 'hei', home: true }, { opp: 'fcb', home: true }, { opp: 'm05', home: false }, { opp: 'sge', home: true }, { opp: 'b04', home: false }],
+    'b04': [{ opp: 'ksc', home: true }, { opp: 'fcu', home: false }, { opp: 'tsg', home: true }, { opp: 'wob', home: false }, { opp: 'bvb', home: true }],
+    'rbl': [{ opp: 'fca', home: true }, { opp: 'bmg', home: false }, { opp: 'boc', home: true }, { opp: 'fcb', home: true }, { opp: 'scf', home: false }],
+    'vfb': [{ opp: 'svw', home: true }, { opp: 'hei', home: false }, { opp: 'fcu', home: true }, { opp: 'm05', home: false }, { opp: 'tsg', home: true }],
+    'sge': [{ opp: 'wob', home: true }, { opp: 'ksc', home: false }, { opp: 'bmg', home: true }, { opp: 'bvb', home: false }, { opp: 'fca', home: true }],
+    'scf': [{ opp: 'tsg', home: true }, { opp: 'fch', home: false }, { opp: 'fcb', home: false }, { opp: 'hei', home: true }, { opp: 'rbl', home: true }],
+    'tsg': [{ opp: 'scf', home: false }, { opp: 'svw', home: true }, { opp: 'b04', home: false }, { opp: 'ksc', home: true }, { opp: 'vfb', home: false }],
+    'wob': [{ opp: 'sge', home: false }, { opp: 'm05', home: true }, { opp: 'fch', home: false }, { opp: 'b04', home: true }, { opp: 'boc', home: false }],
+    'bmg': [{ opp: 'm05', home: true }, { opp: 'rbl', home: true }, { opp: 'sge', home: false }, { opp: 'svw', home: true }, { opp: 'hei', home: false }],
+    'svw': [{ opp: 'vfb', home: false }, { opp: 'tsg', home: false }, { opp: 'ksc', home: true }, { opp: 'bmg', home: false }, { opp: 'fcb', home: false }],
+    'fcu': [{ opp: 'fch', home: true }, { opp: 'b04', home: true }, { opp: 'vfb', home: false }, { opp: 'fca', home: true }, { opp: 'm05', home: false }],
+    'fca': [{ opp: 'rbl', home: false }, { opp: 'boc', home: true }, { opp: 'hei', home: false }, { opp: 'fcu', home: false }, { opp: 'sge', home: false }],
+    'm05': [{ opp: 'bmg', home: false }, { opp: 'wob', home: false }, { opp: 'bvb', home: true }, { opp: 'vfb', home: true }, { opp: 'fcu', home: true }],
+    'boc': [{ opp: 'fcb', home: false }, { opp: 'fca', home: false }, { opp: 'rbl', home: false }, { opp: 'fch', home: true }, { opp: 'wob', home: true }],
+    'hei': [{ opp: 'bvb', home: false }, { opp: 'vfb', home: true }, { opp: 'fca', home: true }, { opp: 'scf', home: false }, { opp: 'bmg', home: true }],
+    'fch': [{ opp: 'fcu', home: false }, { opp: 'scf', home: true }, { opp: 'wob', home: true }, { opp: 'boc', home: false }, { opp: 'ksc', home: true }],
+    'ksc': [{ opp: 'b04', home: false }, { opp: 'sge', home: true }, { opp: 'svw', home: false }, { opp: 'tsg', home: false }, { opp: 'fch', home: false }],
+  }
+
+  const schedule = schedules[teamId] ?? []
+  return schedule.map((s, idx) => {
+    const opp = mockTeams.find(t => t.id === s.opp)!
+    return {
+      matchday: 19 + idx, // Starting from matchday 19
+      opponent_id: opp.id,
+      opponent_name: opp.name,
+      opponent_short: opp.short_name,
+      opponent_logo: opp.logo,
+      is_home: s.home,
+      difficulty: getTeamDifficulty(opp.id),
+    }
+  })
+}
+
+export const mockTeamMatchups: TeamMatchupData[] = [
+  // Top teams - harder to score against, higher clean sheet %
+  {
+    team_id: 'fcb', team_name: 'Bayern München', team_short: 'FCB',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/27.png',
+    points_conceded_def: 14.2, points_conceded_mid: 22.8, points_conceded_fwd: 18.4,
+    clean_sheet_pct: 42,
+    fixtures: createFixtures('fcb'),
+  },
+  {
+    team_id: 'b04', team_name: 'Bayer Leverkusen', team_short: 'B04',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/15.png',
+    points_conceded_def: 13.8, points_conceded_mid: 21.2, points_conceded_fwd: 16.8,
+    clean_sheet_pct: 48,
+    fixtures: createFixtures('b04'),
+  },
+  {
+    team_id: 'bvb', team_name: 'Borussia Dortmund', team_short: 'BVB',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/16.png',
+    points_conceded_def: 16.4, points_conceded_mid: 26.2, points_conceded_fwd: 22.6,
+    clean_sheet_pct: 28,
+    fixtures: createFixtures('bvb'),
+  },
+  {
+    team_id: 'rbl', team_name: 'RB Leipzig', team_short: 'RBL',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/23826.png',
+    points_conceded_def: 15.6, points_conceded_mid: 24.8, points_conceded_fwd: 20.2,
+    clean_sheet_pct: 35,
+    fixtures: createFixtures('rbl'),
+  },
+  {
+    team_id: 'vfb', team_name: 'VfB Stuttgart', team_short: 'VFB',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/79.png',
+    points_conceded_def: 17.2, points_conceded_mid: 27.4, points_conceded_fwd: 24.8,
+    clean_sheet_pct: 22,
+    fixtures: createFixtures('vfb'),
+  },
+  // Mid-table teams
+  {
+    team_id: 'sge', team_name: 'Eintracht Frankfurt', team_short: 'SGE',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/24.png',
+    points_conceded_def: 18.4, points_conceded_mid: 28.6, points_conceded_fwd: 26.2,
+    clean_sheet_pct: 18,
+    fixtures: createFixtures('sge'),
+  },
+  {
+    team_id: 'scf', team_name: 'SC Freiburg', team_short: 'SCF',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/60.png',
+    points_conceded_def: 16.8, points_conceded_mid: 25.4, points_conceded_fwd: 21.8,
+    clean_sheet_pct: 26,
+    fixtures: createFixtures('scf'),
+  },
+  {
+    team_id: 'tsg', team_name: 'TSG Hoffenheim', team_short: 'TSG',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/533.png',
+    points_conceded_def: 19.2, points_conceded_mid: 29.8, points_conceded_fwd: 27.4,
+    clean_sheet_pct: 14,
+    fixtures: createFixtures('tsg'),
+  },
+  {
+    team_id: 'wob', team_name: 'VfL Wolfsburg', team_short: 'WOB',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/82.png',
+    points_conceded_def: 17.8, points_conceded_mid: 27.2, points_conceded_fwd: 24.2,
+    clean_sheet_pct: 20,
+    fixtures: createFixtures('wob'),
+  },
+  {
+    team_id: 'bmg', team_name: 'Bor. Mönchengladbach', team_short: 'BMG',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/18.png',
+    points_conceded_def: 18.8, points_conceded_mid: 29.2, points_conceded_fwd: 26.8,
+    clean_sheet_pct: 16,
+    fixtures: createFixtures('bmg'),
+  },
+  {
+    team_id: 'svw', team_name: 'Werder Bremen', team_short: 'SVW',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/86.png',
+    points_conceded_def: 19.6, points_conceded_mid: 30.4, points_conceded_fwd: 28.2,
+    clean_sheet_pct: 12,
+    fixtures: createFixtures('svw'),
+  },
+  {
+    team_id: 'fcu', team_name: 'Union Berlin', team_short: 'FCU',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/89.png',
+    points_conceded_def: 17.4, points_conceded_mid: 26.6, points_conceded_fwd: 23.4,
+    clean_sheet_pct: 24,
+    fixtures: createFixtures('fcu'),
+  },
+  {
+    team_id: 'fca', team_name: 'FC Augsburg', team_short: 'FCA',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/167.png',
+    points_conceded_def: 20.2, points_conceded_mid: 31.2, points_conceded_fwd: 29.4,
+    clean_sheet_pct: 10,
+    fixtures: createFixtures('fca'),
+  },
+  {
+    team_id: 'm05', team_name: 'Mainz 05', team_short: 'M05',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/39.png',
+    points_conceded_def: 18.2, points_conceded_mid: 28.4, points_conceded_fwd: 25.6,
+    clean_sheet_pct: 18,
+    fixtures: createFixtures('m05'),
+  },
+  // Bottom teams - easier to score against, lower clean sheet %
+  {
+    team_id: 'boc', team_name: 'VfL Bochum', team_short: 'BOC',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/80.png',
+    points_conceded_def: 22.4, points_conceded_mid: 34.8, points_conceded_fwd: 32.6,
+    clean_sheet_pct: 6,
+    fixtures: createFixtures('boc'),
+  },
+  {
+    team_id: 'hei', team_name: 'FC Heidenheim', team_short: 'HEI',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/2036.png',
+    points_conceded_def: 21.8, points_conceded_mid: 33.6, points_conceded_fwd: 31.2,
+    clean_sheet_pct: 8,
+    fixtures: createFixtures('hei'),
+  },
+  {
+    team_id: 'fch', team_name: 'FC St. Pauli', team_short: 'STP',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/35.png',
+    points_conceded_def: 21.2, points_conceded_mid: 32.8, points_conceded_fwd: 30.4,
+    clean_sheet_pct: 10,
+    fixtures: createFixtures('fch'),
+  },
+  {
+    team_id: 'ksc', team_name: 'Holstein Kiel', team_short: 'KIE',
+    team_logo: 'https://tmssl.akamaized.net/images/wappen/head/72.png',
+    points_conceded_def: 23.6, points_conceded_mid: 36.2, points_conceded_fwd: 34.8,
+    clean_sheet_pct: 4,
+    fixtures: createFixtures('ksc'),
+  },
+]
