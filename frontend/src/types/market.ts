@@ -54,6 +54,12 @@ export interface MarketPlayer {
   home_avg: number
   away_avg: number
 
+  // Result sensitivity (win/draw/loss)
+  avg_points_win: number
+  avg_points_draw: number
+  avg_points_loss: number
+  result_sensitivity: number   // (win_avg - loss_avg) / total_avg * 100
+
   // Flags & badges
   is_set_piece_taker: boolean
   is_new_signing: boolean       // fresh Bundesliga transfer

@@ -95,11 +95,21 @@
     </div>
 
     <!-- Home / Away split -->
-    <div class="flex items-center gap-1 md:gap-2 px-3 md:px-4 pb-2 md:pb-3 text-[10px] md:text-xs">
+    <div class="flex items-center gap-1 md:gap-2 px-3 md:px-4 pb-1 md:pb-1.5 text-[10px] md:text-xs">
       <span class="text-gray-400 dark:text-gray-500 uppercase w-8 md:w-10">{{ t('marketPlayers.homeAway') }}</span>
       <span class="font-medium text-gray-700 dark:text-gray-300">{{ t('marketPlayers.home') }} {{ player.home_avg }}</span>
       <span class="text-gray-300 dark:text-gray-600">/</span>
       <span class="font-medium text-gray-700 dark:text-gray-300">{{ t('marketPlayers.away') }} {{ player.away_avg }}</span>
+    </div>
+
+    <!-- Win / Draw / Loss split -->
+    <div class="flex items-center gap-1 md:gap-2 px-3 md:px-4 pb-2 md:pb-3 text-[10px] md:text-xs">
+      <span class="text-gray-400 dark:text-gray-500 uppercase w-8 md:w-10">{{ t('marketPlayers.wdl') }}</span>
+      <span class="font-medium text-emerald-600 dark:text-emerald-400">W {{ player.avg_points_win }}</span>
+      <span class="text-gray-300 dark:text-gray-600">/</span>
+      <span class="font-medium text-gray-600 dark:text-gray-400">D {{ player.avg_points_draw }}</span>
+      <span class="text-gray-300 dark:text-gray-600">/</span>
+      <span class="font-medium text-red-500 dark:text-red-400">L {{ player.avg_points_loss }}</span>
     </div>
   </button>
 </template>

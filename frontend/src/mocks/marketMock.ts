@@ -64,6 +64,9 @@ interface PlayerInput {
   stability: number       // std dev
   homeAvg: number
   awayAvg: number
+  avgPointsWin: number
+  avgPointsDraw: number
+  avgPointsLoss: number
   isSetPieceTaker?: boolean
   isNewSigning?: boolean
   isComeback?: boolean
@@ -116,6 +119,12 @@ function createPlayer(p: PlayerInput): MarketPlayer {
     points_per_minute: pointsPerMinute,
     home_avg: p.homeAvg,
     away_avg: p.awayAvg,
+    avg_points_win: p.avgPointsWin,
+    avg_points_draw: p.avgPointsDraw,
+    avg_points_loss: p.avgPointsLoss,
+    result_sensitivity: avgPoints > 0
+      ? Math.round(((p.avgPointsWin - p.avgPointsLoss) / avgPoints) * 100)
+      : 0,
     is_set_piece_taker: p.isSetPieceTaker ?? false,
     is_new_signing: p.isNewSigning ?? false,
     is_comeback: p.isComeback ?? false,
@@ -135,7 +144,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 8_500_000, valueChange1d: -150_000, valueChange7d: -800_000, valueChange30d: -2_100_000,
     totalPoints: 312, appearances: 14, goals: 0, assists: 0,
     form: 18.3, formTrend: 'falling', rawPointsAvg: 18.5, stability: 8.2,
-    homeAvg: 24.0, awayAvg: 20.6,
+    homeAvg: 24.0, awayAvg: 20.6, avgPointsWin: 26, avgPointsDraw: 22, avgPointsLoss: 14,
     rotationRisk: false,
   }),
   createPlayer({
@@ -144,7 +153,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 12_000_000, valueChange1d: 80_000, valueChange7d: 450_000, valueChange30d: 1_200_000,
     totalPoints: 398, appearances: 17, goals: 0, assists: 0,
     form: 24.8, formTrend: 'rising_slight', rawPointsAvg: 20.1, stability: 6.4,
-    homeAvg: 26.2, awayAvg: 22.1,
+    homeAvg: 26.2, awayAvg: 22.1, avgPointsWin: 28, avgPointsDraw: 24, avgPointsLoss: 16,
   }),
   createPlayer({
     id: 'gk-trapp', name: 'Kevin Trapp', position: 1, age: 34,
@@ -152,7 +161,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 5_200_000, valueChange1d: -30_000, valueChange7d: -120_000, valueChange30d: -340_000,
     totalPoints: 278, appearances: 16, goals: 0, assists: 0,
     form: 16.2, formTrend: 'stable', rawPointsAvg: 15.8, stability: 7.8,
-    homeAvg: 18.4, awayAvg: 14.0,
+    homeAvg: 18.4, awayAvg: 14.0, avgPointsWin: 21, avgPointsDraw: 17, avgPointsLoss: 11,
   }),
   createPlayer({
     id: 'gk-hradecky', name: 'Lukáš Hrádecký', position: 1, age: 35,
@@ -160,7 +169,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 7_800_000, valueChange1d: 60_000, valueChange7d: 380_000, valueChange30d: 900_000,
     totalPoints: 356, appearances: 17, goals: 0, assists: 0,
     form: 22.1, formTrend: 'rising', rawPointsAvg: 19.2, stability: 5.9,
-    homeAvg: 23.4, awayAvg: 18.6,
+    homeAvg: 23.4, awayAvg: 18.6, avgPointsWin: 25, avgPointsDraw: 21, avgPointsLoss: 14,
   }),
 
   // ── Defenders (8) ────────────────────────────
@@ -170,7 +179,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 22_000_000, valueChange1d: 280_000, valueChange7d: 1_800_000, valueChange30d: 4_200_000,
     totalPoints: 387, appearances: 17, goals: 2, assists: 6,
     form: 25.4, formTrend: 'rising', rawPointsAvg: 22.8, stability: 6.1,
-    homeAvg: 26.8, awayAvg: 22.2,
+    homeAvg: 26.8, awayAvg: 22.2, avgPointsWin: 30, avgPointsDraw: 22, avgPointsLoss: 14,
     isSetPieceTaker: false,
   }),
   createPlayer({
@@ -179,7 +188,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 25_000_000, valueChange1d: -120_000, valueChange7d: -600_000, valueChange30d: -1_800_000,
     totalPoints: 312, appearances: 16, goals: 1, assists: 4,
     form: 17.8, formTrend: 'falling_slight', rawPointsAvg: 16.2, stability: 9.4,
-    homeAvg: 21.2, awayAvg: 15.8,
+    homeAvg: 21.2, awayAvg: 15.8, avgPointsWin: 24, avgPointsDraw: 19, avgPointsLoss: 12,
     rotationRisk: true,
   }),
   createPlayer({
@@ -188,7 +197,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 16_000_000, valueChange1d: 140_000, valueChange7d: 920_000, valueChange30d: 2_100_000,
     totalPoints: 298, appearances: 17, goals: 1, assists: 1,
     form: 18.6, formTrend: 'rising_slight', rawPointsAvg: 16.8, stability: 4.2,
-    homeAvg: 19.0, awayAvg: 16.2,
+    homeAvg: 19.0, awayAvg: 16.2, avgPointsWin: 21, avgPointsDraw: 18, avgPointsLoss: 12,
   }),
   createPlayer({
     id: 'df-schlotterbeck', name: 'Nico Schlotterbeck', position: 2, age: 25,
@@ -196,7 +205,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 14_000_000, valueChange1d: 50_000, valueChange7d: 340_000, valueChange30d: 800_000,
     totalPoints: 256, appearances: 16, goals: 1, assists: 0,
     form: 15.2, formTrend: 'stable', rawPointsAvg: 14.6, stability: 5.8,
-    homeAvg: 17.4, awayAvg: 13.0,
+    homeAvg: 17.4, awayAvg: 13.0, avgPointsWin: 20, avgPointsDraw: 16, avgPointsLoss: 10,
   }),
   createPlayer({
     id: 'df-ndicka', name: 'Evan Ndicka', position: 2, age: 24,
@@ -204,7 +213,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 11_500_000, valueChange1d: -80_000, valueChange7d: -450_000, valueChange30d: -1_200_000,
     totalPoints: 198, appearances: 14, goals: 0, assists: 1,
     form: 12.8, formTrend: 'falling_slight', rawPointsAvg: 12.4, stability: 7.1,
-    homeAvg: 15.2, awayAvg: 10.8,
+    homeAvg: 15.2, awayAvg: 10.8, avgPointsWin: 18, avgPointsDraw: 14, avgPointsLoss: 9,
   }),
   createPlayer({
     id: 'df-raum', name: 'David Raum', position: 2, age: 26,
@@ -212,7 +221,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 13_200_000, valueChange1d: 100_000, valueChange7d: 720_000, valueChange30d: 1_600_000,
     totalPoints: 267, appearances: 16, goals: 0, assists: 5,
     form: 18.2, formTrend: 'rising_slight', rawPointsAvg: 15.6, stability: 6.8,
-    homeAvg: 19.6, awayAvg: 15.0,
+    homeAvg: 19.6, awayAvg: 15.0, avgPointsWin: 22, avgPointsDraw: 16, avgPointsLoss: 10,
     isSetPieceTaker: true,
   }),
   createPlayer({
@@ -221,7 +230,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 9_800_000, valueChange1d: -40_000, valueChange7d: -280_000, valueChange30d: -600_000,
     totalPoints: 201, appearances: 15, goals: 1, assists: 0,
     form: 12.4, formTrend: 'stable', rawPointsAvg: 12.2, stability: 5.4,
-    homeAvg: 14.2, awayAvg: 11.0,
+    homeAvg: 14.2, awayAvg: 11.0, avgPointsWin: 17, avgPointsDraw: 13, avgPointsLoss: 9,
   }),
   createPlayer({
     id: 'df-mittelstaedt', name: 'Maximilian Mittelstädt', position: 2, age: 27,
@@ -229,7 +238,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 8_600_000, valueChange1d: 90_000, valueChange7d: 560_000, valueChange30d: 1_400_000,
     totalPoints: 234, appearances: 16, goals: 0, assists: 4,
     form: 16.1, formTrend: 'rising', rawPointsAvg: 14.2, stability: 5.2,
-    homeAvg: 17.8, awayAvg: 12.4,
+    homeAvg: 17.8, awayAvg: 12.4, avgPointsWin: 19, avgPointsDraw: 14, avgPointsLoss: 9,
     isNewSigning: true,
   }),
 
@@ -240,7 +249,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 128_500_000, valueChange1d: 320_000, valueChange7d: 2_340_000, valueChange30d: 8_200_000,
     totalPoints: 847, appearances: 16, goals: 11, assists: 8,
     form: 61.3, formTrend: 'rising', rawPointsAvg: 38.2, stability: 12.4,
-    homeAvg: 57.0, awayAvg: 48.9,
+    homeAvg: 57.0, awayAvg: 48.9, avgPointsWin: 68, avgPointsDraw: 48, avgPointsLoss: 32,
     isSetPieceTaker: true,
   }),
   createPlayer({
@@ -249,7 +258,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 118_000_000, valueChange1d: 210_000, valueChange7d: 1_450_000, valueChange30d: 5_800_000,
     totalPoints: 798, appearances: 17, goals: 9, assists: 10,
     form: 49.2, formTrend: 'rising_slight', rawPointsAvg: 34.1, stability: 11.8,
-    homeAvg: 52.4, awayAvg: 44.8,
+    homeAvg: 52.4, awayAvg: 44.8, avgPointsWin: 62, avgPointsDraw: 44, avgPointsLoss: 28,
   }),
   createPlayer({
     id: 'mf-simons', name: 'Xavi Simons', position: 3, age: 21,
@@ -257,7 +266,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 52_000_000, valueChange1d: 130_000, valueChange7d: 890_000, valueChange30d: 3_200_000,
     totalPoints: 534, appearances: 17, goals: 7, assists: 5,
     form: 33.8, formTrend: 'rising_slight', rawPointsAvg: 26.4, stability: 9.6,
-    homeAvg: 36.2, awayAvg: 28.4,
+    homeAvg: 36.2, awayAvg: 28.4, avgPointsWin: 42, avgPointsDraw: 30, avgPointsLoss: 18,
     isSetPieceTaker: true,
   }),
   createPlayer({
@@ -266,7 +275,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 15_000_000, valueChange1d: 20_000, valueChange7d: 180_000, valueChange30d: 420_000,
     totalPoints: 412, appearances: 17, goals: 2, assists: 3,
     form: 24.8, formTrend: 'stable', rawPointsAvg: 22.6, stability: 4.8,
-    homeAvg: 25.6, awayAvg: 22.8,
+    homeAvg: 25.6, awayAvg: 22.8, avgPointsWin: 28, avgPointsDraw: 24, avgPointsLoss: 18,
     isSetPieceTaker: true,
   }),
   createPlayer({
@@ -275,7 +284,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 20_000_000, valueChange1d: -60_000, valueChange7d: -340_000, valueChange30d: -800_000,
     totalPoints: 367, appearances: 17, goals: 1, assists: 4,
     form: 20.6, formTrend: 'falling_slight', rawPointsAvg: 19.8, stability: 5.6,
-    homeAvg: 22.4, awayAvg: 18.8,
+    homeAvg: 22.4, awayAvg: 18.8, avgPointsWin: 26, avgPointsDraw: 21, avgPointsLoss: 15,
     isSetPieceTaker: true, rotationRisk: true,
   }),
   createPlayer({
@@ -284,7 +293,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 24_800_000, valueChange1d: -320_000, valueChange7d: -1_900_000, valueChange30d: -5_600_000,
     totalPoints: 245, appearances: 13, goals: 3, assists: 2,
     form: 16.4, formTrend: 'falling', rawPointsAvg: 14.8, stability: 11.2,
-    homeAvg: 20.8, awayAvg: 14.2,
+    homeAvg: 20.8, awayAvg: 14.2, avgPointsWin: 28, avgPointsDraw: 16, avgPointsLoss: 8,
   }),
   createPlayer({
     id: 'mf-brandt', name: 'Julian Brandt', position: 3, age: 28,
@@ -292,7 +301,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 16_500_000, valueChange1d: 90_000, valueChange7d: 620_000, valueChange30d: 1_800_000,
     totalPoints: 389, appearances: 17, goals: 4, assists: 7,
     form: 24.2, formTrend: 'rising_slight', rawPointsAvg: 20.4, stability: 7.2,
-    homeAvg: 26.0, awayAvg: 21.8,
+    homeAvg: 26.0, awayAvg: 21.8, avgPointsWin: 30, avgPointsDraw: 22, avgPointsLoss: 14,
     isSetPieceTaker: true,
   }),
   createPlayer({
@@ -301,7 +310,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 19_200_000, valueChange1d: 160_000, valueChange7d: 1_100_000, valueChange30d: 3_400_000,
     totalPoints: 423, appearances: 17, goals: 3, assists: 8,
     form: 27.6, formTrend: 'rising', rawPointsAvg: 21.8, stability: 6.4,
-    homeAvg: 28.4, awayAvg: 24.2,
+    homeAvg: 28.4, awayAvg: 24.2, avgPointsWin: 32, avgPointsDraw: 24, avgPointsLoss: 14,
     isSetPieceTaker: true,
   }),
   createPlayer({
@@ -310,7 +319,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 8_400_000, valueChange1d: 40_000, valueChange7d: 280_000, valueChange30d: 680_000,
     totalPoints: 312, appearances: 16, goals: 3, assists: 2,
     form: 19.8, formTrend: 'stable', rawPointsAvg: 18.4, stability: 5.0,
-    homeAvg: 21.2, awayAvg: 17.4,
+    homeAvg: 21.2, awayAvg: 17.4, avgPointsWin: 24, avgPointsDraw: 19, avgPointsLoss: 13,
   }),
   createPlayer({
     id: 'mf-laimer', name: 'Konrad Laimer', position: 3, age: 27,
@@ -318,7 +327,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 9_200_000, valueChange1d: -30_000, valueChange7d: -220_000, valueChange30d: -480_000,
     totalPoints: 198, appearances: 15, goals: 0, assists: 1,
     form: 11.8, formTrend: 'falling_slight', rawPointsAvg: 11.2, stability: 4.4,
-    homeAvg: 14.0, awayAvg: 10.6,
+    homeAvg: 14.0, awayAvg: 10.6, avgPointsWin: 16, avgPointsDraw: 13, avgPointsLoss: 9,
     rotationRisk: true,
   }),
 
@@ -329,7 +338,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 145_000_000, valueChange1d: -180_000, valueChange7d: -1_200_000, valueChange30d: 2_500_000,
     totalPoints: 762, appearances: 17, goals: 18, assists: 6,
     form: 41.0, formTrend: 'stable', rawPointsAvg: 32.5, stability: 10.8,
-    homeAvg: 46.7, awayAvg: 42.8,
+    homeAvg: 46.7, awayAvg: 42.8, avgPointsWin: 58, avgPointsDraw: 40, avgPointsLoss: 24,
     isSetPieceTaker: true,
   }),
   createPlayer({
@@ -338,7 +347,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 19_500_000, valueChange1d: -140_000, valueChange7d: -980_000, valueChange30d: -2_800_000,
     totalPoints: 287, appearances: 15, goals: 8, assists: 2,
     form: 17.4, formTrend: 'falling_slight', rawPointsAvg: 15.2, stability: 9.8,
-    homeAvg: 22.0, awayAvg: 14.6,
+    homeAvg: 22.0, awayAvg: 14.6, avgPointsWin: 28, avgPointsDraw: 18, avgPointsLoss: 8,
     isComeback: true, // returned from earlier injury
   }),
   createPlayer({
@@ -347,7 +356,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 21_000_000, valueChange1d: 240_000, valueChange7d: 1_650_000, valueChange30d: 4_800_000,
     totalPoints: 398, appearances: 14, goals: 10, assists: 3,
     form: 31.2, formTrend: 'rising', rawPointsAvg: 24.6, stability: 10.2,
-    homeAvg: 32.8, awayAvg: 26.4,
+    homeAvg: 32.8, awayAvg: 26.4, avgPointsWin: 38, avgPointsDraw: 26, avgPointsLoss: 14,
     isComeback: true,
   }),
   createPlayer({
@@ -356,7 +365,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 18_000_000, valueChange1d: 60_000, valueChange7d: 420_000, valueChange30d: 1_200_000,
     totalPoints: 345, appearances: 17, goals: 9, assists: 4,
     form: 21.4, formTrend: 'rising_slight', rawPointsAvg: 17.8, stability: 7.6,
-    homeAvg: 23.0, awayAvg: 18.2,
+    homeAvg: 23.0, awayAvg: 18.2, avgPointsWin: 28, avgPointsDraw: 19, avgPointsLoss: 10,
   }),
   createPlayer({
     id: 'fw-fullkrug', name: 'Niclas Füllkrug', position: 4, age: 31,
@@ -364,7 +373,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 15_800_000, valueChange1d: -380_000, valueChange7d: -2_100_000, valueChange30d: -6_200_000,
     totalPoints: 156, appearances: 11, goals: 4, assists: 1,
     form: 11.2, formTrend: 'falling', rawPointsAvg: 10.8, stability: 8.6,
-    homeAvg: 16.4, awayAvg: 10.2,
+    homeAvg: 16.4, awayAvg: 10.2, avgPointsWin: 22, avgPointsDraw: 12, avgPointsLoss: 6,
   }),
   createPlayer({
     id: 'fw-ekitike', name: 'Hugo Ekitiké', position: 4, age: 22,
@@ -372,7 +381,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 14_200_000, valueChange1d: 200_000, valueChange7d: 1_340_000, valueChange30d: 3_800_000,
     totalPoints: 356, appearances: 16, goals: 8, assists: 5,
     form: 24.6, formTrend: 'rising', rawPointsAvg: 19.2, stability: 8.4,
-    homeAvg: 26.2, awayAvg: 20.8,
+    homeAvg: 26.2, awayAvg: 20.8, avgPointsWin: 30, avgPointsDraw: 20, avgPointsLoss: 12,
     isNewSigning: true,
   }),
   createPlayer({
@@ -381,7 +390,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 11_800_000, valueChange1d: 110_000, valueChange7d: 780_000, valueChange30d: 2_200_000,
     totalPoints: 312, appearances: 16, goals: 7, assists: 3,
     form: 20.8, formTrend: 'rising_slight', rawPointsAvg: 16.4, stability: 6.8,
-    homeAvg: 22.4, awayAvg: 17.2,
+    homeAvg: 22.4, awayAvg: 17.2, avgPointsWin: 26, avgPointsDraw: 18, avgPointsLoss: 10,
     isNewSigning: true,
   }),
   createPlayer({
@@ -390,7 +399,7 @@ export const mockMarketPlayers: MarketPlayer[] = [
     marketValue: 7_400_000, valueChange1d: 140_000, valueChange7d: 920_000, valueChange30d: 2_600_000,
     totalPoints: 289, appearances: 17, goals: 9, assists: 2,
     form: 18.6, formTrend: 'rising', rawPointsAvg: 14.8, stability: 7.4,
-    homeAvg: 20.2, awayAvg: 15.8,
+    homeAvg: 20.2, awayAvg: 15.8, avgPointsWin: 24, avgPointsDraw: 16, avgPointsLoss: 8,
     isSetPieceTaker: true,
   }),
 ]

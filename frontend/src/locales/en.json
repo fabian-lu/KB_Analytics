@@ -179,7 +179,8 @@
     "injuredUntil": "Until {date}",
     "searchTeams": "Teams",
     "searchPlayers": "Players",
-    "clearAll": "Clear all"
+    "clearAll": "Clear all",
+    "wdl": "W/D/L"
   },
   "position": {
     "gk": "GK",
@@ -300,6 +301,12 @@
     "avgPerMatchday": "avg per matchday",
     "vsTotal": "vs total avg",
     "rawPointsExplanation": "Raw points exclude starter bonus, goal bonus, and other modifiers",
+    "resultImpact": "Win/Loss Impact",
+    "win": "Win",
+    "draw": "Draw",
+    "loss": "Loss",
+    "resultSensitivity": "Result Sensitivity",
+    "resultSensitivityExplanation": "How much a player's points depend on their team's match result. Higher = more result-dependent.",
     "currentValue": "Current",
     "change1d": "1 Day",
     "change7d": "7 Days",

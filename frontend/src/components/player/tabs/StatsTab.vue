@@ -140,6 +140,51 @@
       </div>
     </div>
 
+    <!-- Win / Draw / Loss Impact -->
+    <div>
+      <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">
+        {{ t('player.resultImpact') }}
+      </h3>
+      <div class="grid grid-cols-3 gap-3">
+        <!-- Win -->
+        <div class="rounded-xl p-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 text-center">
+          <p class="text-xs text-emerald-600 dark:text-emerald-400 uppercase font-medium mb-1">{{ t('player.win') }}</p>
+          <p class="text-xl font-bold text-gray-900 dark:text-white">{{ player.result_sensitivity.avg_points_win.toFixed(1) }}</p>
+          <p class="text-[10px] text-gray-500 dark:text-gray-400">{{ player.result_sensitivity.games_won }} {{ t('player.games') }}</p>
+        </div>
+        <!-- Draw -->
+        <div class="rounded-xl p-3 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 text-center">
+          <p class="text-xs text-gray-500 dark:text-gray-400 uppercase font-medium mb-1">{{ t('player.draw') }}</p>
+          <p class="text-xl font-bold text-gray-900 dark:text-white">{{ player.result_sensitivity.avg_points_draw.toFixed(1) }}</p>
+          <p class="text-[10px] text-gray-500 dark:text-gray-400">{{ player.result_sensitivity.games_drawn }} {{ t('player.games') }}</p>
+        </div>
+        <!-- Loss -->
+        <div class="rounded-xl p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-center">
+          <p class="text-xs text-red-500 dark:text-red-400 uppercase font-medium mb-1">{{ t('player.loss') }}</p>
+          <p class="text-xl font-bold text-gray-900 dark:text-white">{{ player.result_sensitivity.avg_points_loss.toFixed(1) }}</p>
+          <p class="text-[10px] text-gray-500 dark:text-gray-400">{{ player.result_sensitivity.games_lost }} {{ t('player.games') }}</p>
+        </div>
+      </div>
+
+      <!-- Sensitivity bar -->
+      <div class="mt-3 rounded-xl p-3 bg-gray-50 dark:bg-gray-800/50">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-xs text-gray-500 dark:text-gray-400">{{ t('player.resultSensitivity') }}</span>
+          <span class="text-sm font-semibold" :class="sensitivityColor">{{ player.result_sensitivity.sensitivity }}%</span>
+        </div>
+        <div class="h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+          <div
+            class="h-full rounded-full transition-all"
+            :class="sensitivityBarColor"
+            :style="{ width: `${Math.min(100, player.result_sensitivity.sensitivity)}%` }"
+          />
+        </div>
+        <p class="text-[10px] text-gray-400 dark:text-gray-500 mt-1.5">
+          {{ t('player.resultSensitivityExplanation') }}
+        </p>
+      </div>
+    </div>
+
     <!-- Raw Points -->
     <div>
       <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">
@@ -230,6 +275,20 @@ const pointsPer90 = computed(() => {
   const totalMinutes = seasonStats.value.avg_minutes * seasonStats.value.games_played
   if (totalMinutes === 0) return 0
   return (seasonStats.value.total_points / totalMinutes) * 90
+})
+
+const sensitivityColor = computed(() => {
+  const s = props.player.result_sensitivity.sensitivity
+  if (s >= 60) return 'text-red-500'
+  if (s >= 40) return 'text-amber-500'
+  return 'text-emerald-500'
+})
+
+const sensitivityBarColor = computed(() => {
+  const s = props.player.result_sensitivity.sensitivity
+  if (s >= 60) return 'bg-red-500'
+  if (s >= 40) return 'bg-amber-500'
+  return 'bg-emerald-500'
 })
 
 const homePercentage = computed(() => {

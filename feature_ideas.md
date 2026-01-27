@@ -2,6 +2,7 @@
 
 Organized by main page. Each page has subpages that group related features.
 
+
 ---
 
 ## Market
@@ -30,6 +31,7 @@ Full Bundesliga player database with powerful filtering and sorting.
 | Points per Minute | Normalized points for fair comparison | Medium |
 | New Signing Badge | Mark fresh Bundesliga transfers (sleeper potential) | Low |
 | Comeback Watch | Players returning from injury, worth monitoring | Medium |
+| Result Sensitivity | Avg points in team wins vs draws vs losses; shows how result-dependent a player is (also in Player Modal > Stats) | Medium |
 
 ### Subpage: Analysis
 Charts and tools to analyze player performance and value.
@@ -250,6 +252,7 @@ ML-powered forecasts.
 | Fixture Difficulty Model | ML-based difficulty (form, home/away, rest days, not just opponent) | Medium |
 | Form Projections | Is player trending up or down | Medium |
 | Confidence Intervals | "8 pts (95% CI: 4-12)" not just point estimates | Medium |
+| Match Outcome Prediction | ML prediction of Bundesliga match results (win/draw/loss probability per team) | Medium |
 | Season Projections | End-of-season point totals forecast | Low |
 
 **xPoints Explained:**

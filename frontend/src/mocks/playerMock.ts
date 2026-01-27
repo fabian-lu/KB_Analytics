@@ -321,6 +321,17 @@ const mockWirtz: PlayerDetail = {
     euros_per_point: 462_000,
   },
 
+  // Result sensitivity
+  result_sensitivity: {
+    avg_points_win: 68,
+    avg_points_draw: 48,
+    avg_points_loss: 32,
+    games_won: 10,
+    games_drawn: 3,
+    games_lost: 3,
+    sensitivity: 68,
+  },
+
   // Form
   form_trend: 'rising',
   last_5_points: [43, 61, 78, 38, 67],
@@ -451,6 +462,17 @@ const mockKane: PlayerDetail = {
     euros_per_point: 833_000,
   },
 
+  // Result sensitivity
+  result_sensitivity: {
+    avg_points_win: 58,
+    avg_points_draw: 40,
+    avg_points_loss: 24,
+    games_won: 12,
+    games_drawn: 3,
+    games_lost: 2,
+    sensitivity: 76,
+  },
+
   form_trend: 'stable',
   last_5_points: [52, 38, 45, 41, 48],
 
@@ -570,6 +592,17 @@ const mockNeuer: PlayerDetail = {
     avg_points: 11.6,
     market_value: 4_200_000,
     euros_per_point: 362_000,
+  },
+
+  // Result sensitivity
+  result_sensitivity: {
+    avg_points_win: 26,
+    avg_points_draw: 22,
+    avg_points_loss: 14,
+    games_won: 9,
+    games_drawn: 3,
+    games_lost: 2,
+    sensitivity: 54,
   },
 
   form_trend: 'falling',

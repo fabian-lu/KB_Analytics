@@ -179,7 +179,8 @@
     "injuredUntil": "Bis {date}",
     "searchTeams": "Teams",
     "searchPlayers": "Spieler",
-    "clearAll": "Alle löschen"
+    "clearAll": "Alle löschen",
+    "wdl": "S/U/N"
   },
   "position": {
     "gk": "TW",
@@ -300,6 +301,12 @@
     "avgPerMatchday": "Ø pro Spieltag",
     "vsTotal": "vs Gesamt Ø",
     "rawPointsExplanation": "Rohpunkte ohne Starterbonus, Torbonus und andere Modifikatoren",
+    "resultImpact": "Ergebnis-Einfluss",
+    "win": "Sieg",
+    "draw": "Remis",
+    "loss": "Niederlage",
+    "resultSensitivity": "Ergebnis-Abhängigkeit",
+    "resultSensitivityExplanation": "Wie stark die Punkte eines Spielers vom Spielausgang abhängen. Höher = ergebnisabhängiger.",
     "currentValue": "Aktuell",
     "change1d": "1 Tag",
     "change7d": "7 Tage",

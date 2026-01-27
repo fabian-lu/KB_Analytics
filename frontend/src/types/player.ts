@@ -160,6 +160,20 @@ export interface NewsArticle {
 }
 
 // ============================================
+// Result Sensitivity (Win/Draw/Loss)
+// ============================================
+
+export interface ResultSensitivity {
+  avg_points_win: number
+  avg_points_draw: number
+  avg_points_loss: number
+  games_won: number
+  games_drawn: number
+  games_lost: number
+  sensitivity: number          // (win_avg - loss_avg) / total_avg * 100
+}
+
+// ============================================
 // Form Trend
 // ============================================
 
@@ -202,6 +216,9 @@ export interface PlayerDetail {
   bundesliga_rank: RankingInfo
   position_rank: RankingInfo
   position_average: PositionAverage
+
+  // Result sensitivity
+  result_sensitivity: ResultSensitivity
 
   // Form
   form_trend: FormTrend
