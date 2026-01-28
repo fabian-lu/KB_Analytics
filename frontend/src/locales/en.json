@@ -17,11 +17,11 @@
   },
   "league": {
     "tabs": {
+      "managers": "Managers",
+      "transferMarket": "Transfer Market",
+      "transfers": "Transfers",
       "standings": "Standings",
-      "members": "Members",
-      "results": "Results",
-      "statistics": "Statistics",
-      "rules": "Rules"
+      "live": "Live"
     }
   },
   "insights": {

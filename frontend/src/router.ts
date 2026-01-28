@@ -63,27 +63,27 @@ const router = createRouter({
       children: [
         {
           path: '',
-          redirect: '/league/standings',
+          redirect: '/league/managers',
+        },
+        {
+          path: 'managers',
+          component: () => import('./pages/league/LeagueManagers.vue'),
+        },
+        {
+          path: 'transfer-market',
+          component: () => import('./pages/league/LeagueTransferMarket.vue'),
+        },
+        {
+          path: 'transfers',
+          component: () => import('./pages/league/LeagueTransfers.vue'),
         },
         {
           path: 'standings',
           component: () => import('./pages/league/LeagueStandings.vue'),
         },
         {
-          path: 'members',
-          component: () => import('./pages/league/LeagueMembers.vue'),
-        },
-        {
-          path: 'results',
-          component: () => import('./pages/league/LeagueResults.vue'),
-        },
-        {
-          path: 'statistics',
-          component: () => import('./pages/league/LeagueStatistics.vue'),
-        },
-        {
-          path: 'rules',
-          component: () => import('./pages/league/LeagueRules.vue'),
+          path: 'live',
+          component: () => import('./pages/league/LeagueLive.vue'),
         },
       ],
     },

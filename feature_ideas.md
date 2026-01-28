@@ -203,7 +203,9 @@ All transfer activity in your league.
 | Top Transfers (7d) | Biggest/most expensive recent transfers | Medium |
 | Transfer Stats | Total transfers per manager, avg price paid | Medium |
 
-### Subpage: Traders
+### ~~Subpage: Traders~~ (Not a standalone subpage)
+> **Note:** Traders features will be integrated into other subpages (e.g., Managers or Transfers). Not implemented as a separate tab.
+
 Who's good at buying/selling in your league.
 
 | Feature | Description | Priority |
@@ -221,7 +223,9 @@ Who's good at buying/selling in your league.
 - Time-based patterns (overpays near deadline?)
 - Position preferences (overpays for forwards?)
 
-### Subpage: Head-to-Head
+### ~~Subpage: Head-to-Head~~ (Not a standalone subpage)
+> **Note:** Head-to-Head features will be integrated into other subpages (e.g., Managers). Not implemented as a separate tab.
+
 Compare your team directly with another manager.
 
 | Feature | Description | Priority |
@@ -398,14 +402,14 @@ The app should emphasize:
 5. **Best XI** - Best possible team per matchday, auto-formation
 6. **Watchlist** - Track players you're interested in
 
-### League (7 subpages) - Your Kickbase League
-1. **Live** - Real-time matchday points while games are ongoing
-2. **Standings** - Table, ranking history
-3. **Managers** - Profiles, squad lineup view (reusable component), achievements
-4. **Transfer Market** - Players currently listed for sale
-5. **Transfers** - Activity feed, history
-6. **Traders** - Best/worst, overpay pattern analysis
-7. **Head-to-Head** - Your team vs another
+### League (5 subpages) - Your Kickbase League
+1. **Managers** - Profiles, squad lineup view (reusable component), achievements
+2. **Transfer Market** - Players currently listed for sale
+3. **Transfers** - Activity feed, history
+4. **Standings** - Table, ranking history
+5. **Live** - Real-time matchday points while games are ongoing
+
+> Traders and Head-to-Head features are integrated into other subpages (e.g., Managers, Transfers).
 
 ### Insights (4 subpages) - AI/ML Tools
 1. **Predictions** - ML point/value forecasts
@@ -436,8 +440,8 @@ The app should emphasize:
 - Market > Matchups (fixture difficulty)
 - Market > Best XI (best team per matchday)
 - Market > Watchlist
-- League > Head-to-Head
-- League > Traders (best/worst, overpay patterns)
+- League > Managers (head-to-head, trader analysis integrated)
+- League > Transfers (trader stats integrated)
 
 ### Phase 3 - AI/ML Features
 - Insights > Predictions (ML models)

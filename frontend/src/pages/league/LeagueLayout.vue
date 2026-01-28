@@ -47,11 +47,11 @@ import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSwipe } from '@vueuse/core'
 import {
-  BarChart3,
   Users,
-  Calendar,
-  PieChart,
-  ScrollText
+  Store,
+  ArrowLeftRight,
+  BarChart3,
+  Radio
 } from 'lucide-vue-next'
 
 const route = useRoute()
@@ -64,11 +64,11 @@ const tabRefs = ref<Record<string, HTMLElement | null>>({})
 const slideDirection = ref<'slide-left' | 'slide-right'>('slide-left')
 
 const tabs = [
+  { key: 'managers', path: '/league/managers', icon: Users },
+  { key: 'transferMarket', path: '/league/transfer-market', icon: Store },
+  { key: 'transfers', path: '/league/transfers', icon: ArrowLeftRight },
   { key: 'standings', path: '/league/standings', icon: BarChart3 },
-  { key: 'members', path: '/league/members', icon: Users },
-  { key: 'results', path: '/league/results', icon: Calendar },
-  { key: 'statistics', path: '/league/statistics', icon: PieChart },
-  { key: 'rules', path: '/league/rules', icon: ScrollText },
+  { key: 'live', path: '/league/live', icon: Radio },
 ]
 
 function setTabRef(path: string, el: any) {
