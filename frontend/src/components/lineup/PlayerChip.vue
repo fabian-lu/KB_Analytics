@@ -1,9 +1,9 @@
 <template>
-  <div :class="readonly ? '' : 'touch-none'">
+  <div :class="readonly ? '' : 'touch-none'" @click="handleClick">
     <!-- Mobile: Circle with last name -->
     <div
       class="lg:hidden flex flex-col items-center transition-transform"
-      :class="readonly ? '' : 'cursor-grab active:cursor-grabbing hover:scale-110'"
+      :class="readonly ? 'cursor-pointer hover:scale-105' : 'cursor-grab active:cursor-grabbing hover:scale-110'"
     >
       <div class="relative">
         <img
@@ -28,7 +28,7 @@
     <div
       class="hidden lg:flex flex-col items-center p-2 rounded-lg backdrop-blur-sm shadow-md w-20 transition-transform"
       :class="[
-        readonly ? '' : 'cursor-grab active:cursor-grabbing hover:scale-105',
+        readonly ? 'cursor-pointer hover:scale-105' : 'cursor-grab active:cursor-grabbing hover:scale-105',
         highlight ? 'bg-amber-400/30 ring-2 ring-amber-400' : 'bg-white/20',
       ]"
     >
@@ -79,6 +79,16 @@ const props = defineProps<{
   readonly?: boolean
   highlight?: boolean
 }>()
+
+const emit = defineEmits<{
+  click: [player: PlayerSummary]
+}>()
+
+function handleClick() {
+  if (props.readonly) {
+    emit('click', props.player)
+  }
+}
 
 const lastName = computed(() => {
   const parts = props.player.name.split(' ')

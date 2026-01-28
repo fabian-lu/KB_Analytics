@@ -58,6 +58,7 @@
             :player="player"
             :readonly="true"
             :highlight="highlightIds.has(player.id)"
+            @click="handlePlayerClick"
           />
         </div>
       </template>
@@ -90,6 +91,7 @@
             :player="player"
             :readonly="true"
             :highlight="highlightIds.has(player.id)"
+            @click="handlePlayerClick"
           />
         </div>
       </template>
@@ -122,6 +124,7 @@
             :player="player"
             :readonly="true"
             :highlight="highlightIds.has(player.id)"
+            @click="handlePlayerClick"
           />
         </div>
       </template>
@@ -154,6 +157,7 @@
             :player="player"
             :readonly="true"
             :highlight="highlightIds.has(player.id)"
+            @click="handlePlayerClick"
           />
         </div>
       </template>
@@ -214,7 +218,12 @@ const emit = defineEmits<{
   'update:startingDF': [players: PlayerSummary[]]
   'update:startingMF': [players: PlayerSummary[]]
   'update:startingFW': [players: PlayerSummary[]]
+  'playerClick': [player: PlayerSummary]
 }>()
+
+function handlePlayerClick(player: PlayerSummary) {
+  emit('playerClick', player)
+}
 
 const highlightIds = computed(() => new Set(props.highlightPlayerIds))
 

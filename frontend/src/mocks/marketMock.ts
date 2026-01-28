@@ -627,7 +627,7 @@ export interface BestXIMatchday {
 }
 
 /** Convert a MarketPlayer to PlayerSummary with optional matchday-specific points */
-function toPlayerSummary(p: MarketPlayer, mdPoints?: number): PlayerSummary {
+export function toPlayerSummary(p: MarketPlayer, mdPoints?: number): PlayerSummary {
   return {
     id: p.id,
     name: p.name,

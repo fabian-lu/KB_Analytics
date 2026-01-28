@@ -89,6 +89,16 @@ frontend/
 │   │   │   ├── PlayerChip.vue       # Player chip for pitch display
 │   │   │   └── StatBox.vue          # Compact stat with icon and tooltip
 │   │   │
+│   │   ├── league/              # League page components
+│   │   │   ├── ManagerSelector.vue      # Horizontal scrollable manager avatar bar
+│   │   │   ├── ManagerStatsGrid.vue     # Stat cards (avg pts, best/worst MD, etc.)
+│   │   │   ├── ManagerPointsChart.vue   # Bar chart of points per matchday with crowns
+│   │   │   ├── ManagerValueChanges.vue  # Player value changes table (1d/7d/30d)
+│   │   │   ├── ManagerAchievements.vue  # Achievement cards with emoji + level
+│   │   │   ├── ManagerBenchComparison.vue # Compare bench/starting/total across managers
+│   │   │   ├── ManagerActivityBadge.vue # Transfer activity + engagement level
+│   │   │   └── ManagerSquadStats.vue    # Squad stats with bench/starting/total selector
+│   │   │
 │   │   ├── ui/                  # Reusable UI components
 │   │   │   ├── BaseModal.vue    # Modal wrapper (sm, md, lg, fullscreen, body scroll lock)
 │   │   │   └── ConfirmModal.vue # Confirmation dialog (built on BaseModal)
@@ -112,6 +122,7 @@ frontend/
 │   │   │
 │   │   ├── league/              # League section (nested routes)
 │   │   │   ├── LeagueLayout.vue
+│   │   │   ├── LeagueManagers.vue  # Manager profiles, squads, stats, achievements
 │   │   │   ├── LeagueStandings.vue
 │   │   │   ├── LeagueMembers.vue
 │   │   │   ├── LeagueResults.vue
@@ -141,12 +152,14 @@ frontend/
 │   │   ├── dashboard.ts
 │   │   ├── player.ts        # PlayerDetail, nested types for player modal
 │   │   ├── market.ts        # MarketPlayer, filter/sort types for market page
-│   │   └── analysis.ts      # ChartDataPoint, RegressionResult, analysis utilities
+│   │   ├── analysis.ts      # ChartDataPoint, RegressionResult, analysis utilities
+│   │   └── league.ts        # ManagerProfile, ManagerStats, achievements, activity
 │   │
 │   ├── mocks/               # Mock data for development
 │   │   ├── dashboardMock.ts # Dashboard response mock
 │   │   ├── playerMock.ts    # Player detail mock (Florian Wirtz)
-│   │   └── marketMock.ts    # Market players (30 players) + teams for testing
+│   │   ├── marketMock.ts    # Market players (30 players) + teams for testing
+│   │   └── leagueMock.ts    # Manager profiles (8 managers) with squads + achievements
 │   │
 │   ├── composables/         # Reusable stateful logic
 │   │   ├── useAuth.ts       # Auth state
@@ -923,3 +936,87 @@ Compact stat display with tooltip:
   :description="t('lineup.formationDesc')"
 />
 ```
+
+---
+
+## League Managers Page
+
+The `LeagueManagers.vue` page displays detailed manager profiles with squad views, stats, achievements, and comparisons.
+
+### Features
+
+- **Manager Selector** - Horizontal scrollable avatar bar for selecting managers
+- **Profile Header** - Large avatar, rank badge, team value, budget, total points, transfer profit
+- **Squad View** - LineupPitch (readonly) with clickable players that open PlayerModal
+- **Bench Section** - Clickable bench player cards
+- **Stats Grid** - Avg points/matchday, best/worst matchday, consistency, wins, top-3 finishes
+- **Points Chart** - Bar chart showing points per matchday with crown icons for wins
+- **Investment Capacity** - Budget, sellable value, spending power, max single buy
+- **Activity Badge** - Transfer frequency, engagement level (very_active → inactive)
+- **Squad Stats** - Selector-based (bench/starting/total) comparison of squad metrics
+- **Value Changes** - Table of player value changes (1d/7d/30d)
+- **Achievements** - Achievement cards with emoji icons and bronze/silver/gold levels
+- **Bench Comparison** - Compare managers by bench/starting/total with multiple metrics
+
+### Types (src/types/league.ts)
+
+Key types for the managers page:
+
+```typescript
+interface ManagerProfile {
+  manager: Manager
+  rank: number
+  team_value: number
+  budget: number
+  total_points: number
+  transfer_profit: number
+  lineup: DashboardLineup
+  investment: InvestmentCapacity
+  value_changes: PlayerValueChange[]
+  stats: ManagerStats
+  matchday_history: ManagerMatchdayResult[]
+  achievements: KickbaseAchievement[]
+  bench_strength: BenchStrength
+  activity: ManagerActivity
+}
+
+interface ManagerStats {
+  avg_points_per_matchday: number
+  best_matchday: { matchday: number; points: number }
+  worst_matchday: { matchday: number; points: number }
+  consistency: number  // standard deviation
+  matchday_wins: number
+  total_matchdays_played: number
+  top3_finishes: number
+}
+
+interface ManagerActivity {
+  total_transfers: number
+  buys: number
+  sells: number
+  transfers_per_week: number
+  last_transfer_date: string
+  days_since_last_transfer: number
+  engagement_level: 'very_active' | 'active' | 'moderate' | 'passive' | 'inactive'
+}
+```
+
+### Mock Data (src/mocks/leagueMock.ts)
+
+- 8 manager profiles with German names
+- Players distributed across managers (no overlap, Kickbase ownership model)
+- Each manager: 11 starting + 2-7 bench players
+- Pool of ~10 achievements, 2-6 assigned per manager
+- 17 matchdays of history per manager
+- Varied activity levels
+
+### Translation Keys
+
+Located in `src/locales/en.json` and `de.json` under the `managers` section:
+
+- Profile: `rank`, `teamValue`, `budget`, `totalPoints`, `transferProfit`
+- Stats: `avgPerMatchday`, `bestMatchday`, `worstMatchday`, `consistency`, `matchdayWins`
+- Investment: `availableBudget`, `sellableValue`, `totalSpendingPower`, `maxSingleBuy`
+- Activity: `totalTransfers`, `buys`, `sells`, `lastTransfer`, engagement level labels
+- Achievements: `achievements`, level labels (bronze/silver/gold)
+- Comparison: `leagueComparison.*` for bench comparison selector options

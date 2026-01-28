@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col h-full">
     <!-- Secondary Navigation -->
-    <div class="sticky top-16 z-40 bg-surface dark:bg-surface-dark border-b border-gray-200 dark:border-gray-800">
+    <div class="sticky top-14 md:top-16 z-40 bg-surface dark:bg-surface-dark border-b border-gray-200 dark:border-gray-800">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav
           ref="navRef"
@@ -108,9 +108,36 @@ watch(() => route.path, () => {
   nextTick(scrollActiveTabIntoView)
 })
 
+// Swipe detection — ignore swipes that start on horizontally scrollable elements or charts
+const swipeBlocked = ref(false)
+
 const { direction } = useSwipe(swipeContainer, {
   threshold: 50,
+  onSwipeStart(e) {
+    const target = e.target as HTMLElement
+
+    // Block swipe if it started on a canvas (chart) element
+    if (target.tagName === 'CANVAS' || target.closest('canvas')) {
+      swipeBlocked.value = true
+      return
+    }
+
+    // Walk up from touch target to see if it's inside a horizontally scrollable container
+    let el: HTMLElement | null = target
+    while (el && el !== swipeContainer.value) {
+      if (el.scrollWidth > el.clientWidth + 1) {
+        swipeBlocked.value = true
+        return
+      }
+      el = el.parentElement
+    }
+    swipeBlocked.value = false
+  },
   onSwipeEnd() {
+    if (swipeBlocked.value) {
+      swipeBlocked.value = false
+      return
+    }
     if (direction.value === 'left') {
       navigateToTab(currentIndex.value + 1)
     } else if (direction.value === 'right') {

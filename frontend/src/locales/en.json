@@ -470,5 +470,102 @@
     "goToPlayers": "Go to Players",
     "clearConfirmTitle": "Clear watchlist?",
     "clearConfirmMessage": "All watched players and notes will be removed. This cannot be undone."
+  },
+  "managers": {
+    "title": "Managers",
+    "selectManager": "Select a manager",
+    "rank": "Rank",
+    "rankNum": "#{num}",
+    "teamValue": "Team Value",
+    "budget": "Budget",
+    "totalPoints": "Total Points",
+    "stats": {
+      "title": "Statistics",
+      "avgPerMatchday": "Avg per Matchday",
+      "avgPerMatchdayDesc": "Average points scored per matchday",
+      "bestMatchday": "Best Matchday",
+      "bestMatchdayDesc": "Highest scoring matchday this season",
+      "worstMatchday": "Worst Matchday",
+      "worstMatchdayDesc": "Lowest scoring matchday this season",
+      "consistency": "Consistency",
+      "consistencyDesc": "Standard deviation of points - lower means more consistent",
+      "matchdayWins": "Matchday Wins",
+      "matchdayWinsDesc": "Number of matchdays won in the league",
+      "top3Finishes": "Top 3 Finishes",
+      "top3FinishesDesc": "Number of times finished in top 3 for a matchday"
+    },
+    "investment": {
+      "title": "Investment Capacity",
+      "availableBudget": "Available Budget",
+      "sellableValue": "Sellable Value",
+      "totalSpendingPower": "Total Spending Power",
+      "maxSingleBuy": "Max Single Buy"
+    },
+    "valueChanges": {
+      "title": "Value Changes",
+      "player": "Player",
+      "change1d": "1 Day",
+      "change7d": "7 Days",
+      "change30d": "30 Days",
+      "noChanges": "No significant value changes"
+    },
+    "achievements": {
+      "title": "Achievements",
+      "level1": "Bronze",
+      "level2": "Silver",
+      "level3": "Gold",
+      "earnedOn": "Earned on {date}",
+      "noAchievements": "No achievements yet"
+    },
+    "leagueComparison": {
+      "title": "League Comparison",
+      "startingXI": "Starting",
+      "bench": "Bench",
+      "total": "Total",
+      "avgPts": "Avg Pts",
+      "totalPts": "Total Pts",
+      "value": "Value",
+      "efficiency": "Pts/€M",
+      "players": "players"
+    },
+    "activity": {
+      "title": "Activity",
+      "totalTransfers": "Total Transfers",
+      "buys": "Buys",
+      "sells": "Sells",
+      "transfersPerWeek": "Transfers/Week",
+      "lastTransfer": "Last Transfer",
+      "daysAgo": "{days} days ago",
+      "today": "Today",
+      "engagement": {
+        "very_active": "Very Active",
+        "active": "Active",
+        "moderate": "Moderate",
+        "passive": "Passive",
+        "inactive": "Inactive"
+      }
+    },
+    "squad": "Squad",
+    "bench": "Bench",
+    "points": "pts",
+    "matchday": "MD",
+    "transferProfit": "Transfer Profit",
+    "pointsHistory": {
+      "title": "Points per Matchday",
+      "win": "Matchday Win"
+    },
+    "squadStats": {
+      "title": "Squad Stats",
+      "startingXI": "Starting XI",
+      "bench": "Bench",
+      "total": "Total",
+      "players": "Players",
+      "totalPoints": "Total Points",
+      "avgPoints": "Avg Points",
+      "totalValue": "Total Value",
+      "avgValue": "Avg Value",
+      "efficiency": "Pts/€M",
+      "byPosition": "By Position"
+    }
   }
 }
