@@ -1,9 +1,40 @@
 /**
- * Types for League > Managers page.
+ * Types for League pages.
  * Reuses Manager, PlayerSummary, DashboardLineup from dashboard.ts
  */
 
 import type { Manager, PlayerSummary, DashboardLineup } from './dashboard'
+import type { MarketPlayer } from './market'
+
+// ============================================
+// Transfer Market Listing
+// ============================================
+
+export interface TransferMarketListing {
+  /** The player being sold (full MarketPlayer data) */
+  player: MarketPlayer
+  /** Manager who listed the player */
+  seller: Manager
+  /** Asking price set by seller */
+  asking_price: number
+  /** ISO timestamp when listed */
+  listed_at: string
+  /** Hours since listing (derived) */
+  hours_listed: number
+  /** Price difference: asking_price - market_value */
+  price_diff: number
+  /** Price difference as percentage */
+  price_diff_pct: number
+}
+
+export type TransferMarketSortOption =
+  | 'asking_price'
+  | 'market_value'
+  | 'price_diff'
+  | 'hours_listed'
+  | 'avg_points'
+  | 'ppm'
+  | 'value_change_7d'
 
 // ============================================
 // Kickbase Achievements

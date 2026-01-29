@@ -13,6 +13,7 @@ import type {
   BenchStrength,
   ManagerActivity,
   EngagementLevel,
+  TransferMarketListing,
 } from '@/types/league'
 import type { Manager, PlayerSummary, DashboardLineup } from '@/types/dashboard'
 import { mockMarketPlayers, toPlayerSummary } from './marketMock'
@@ -368,3 +369,62 @@ export const mockManagerProfiles: ManagerProfile[] = managerData.map((m, idx) =>
   createManagerProfile(m.name, m.seed, idx + 1, playerDistributions[idx])
 ).sort((a, b) => b.total_points - a.total_points)
   .map((profile, idx) => ({ ...profile, rank: idx + 1 })) // Re-rank by total points
+
+// ============================================
+// TRANSFER MARKET LISTINGS
+// ============================================
+
+/**
+ * Create mock transfer market listings.
+ * Some players from each manager are listed for sale.
+ */
+function createTransferMarketListings(): TransferMarketListing[] {
+  const listings: TransferMarketListing[] = []
+
+  // Pick 1-2 players from each manager's squad to list on the market
+  for (const profile of mockManagerProfiles) {
+    const squadPlayers = [...profile.lineup.starting, ...profile.lineup.bench]
+
+    // Pick players based on manager seed for deterministic selection
+    const numToList = 1 + (profile.manager.id.charCodeAt(4) % 2) // 1 or 2 players
+
+    for (let i = 0; i < numToList && i < squadPlayers.length; i++) {
+      const playerSummary = squadPlayers[(profile.manager.id.charCodeAt(4) + i * 3) % squadPlayers.length]
+
+      // Find the full MarketPlayer data
+      const marketPlayer = mockMarketPlayers.find(p => p.id === playerSummary.id)
+      if (!marketPlayer) continue
+
+      // Calculate listing details
+      const seed = playerSummary.id.charCodeAt(0) + profile.manager.id.charCodeAt(4)
+
+      // Asking price: market value +/- some percentage (some overpriced, some bargains)
+      const priceVariation = ((seed % 30) - 10) / 100 // -10% to +20%
+      const askingPrice = Math.round(marketPlayer.market_value * (1 + priceVariation))
+
+      // Hours listed: 1 to 72 hours
+      const hoursListed = 1 + (seed % 72)
+
+      // Calculate time listed
+      const listedAt = new Date()
+      listedAt.setHours(listedAt.getHours() - hoursListed)
+
+      const priceDiff = askingPrice - marketPlayer.market_value
+      const priceDiffPct = Math.round((priceDiff / marketPlayer.market_value) * 10000) / 100
+
+      listings.push({
+        player: marketPlayer,
+        seller: profile.manager,
+        asking_price: askingPrice,
+        listed_at: listedAt.toISOString(),
+        hours_listed: hoursListed,
+        price_diff: priceDiff,
+        price_diff_pct: priceDiffPct,
+      })
+    }
+  }
+
+  return listings
+}
+
+export const mockTransferMarketListings: TransferMarketListing[] = createTransferMarketListings()
