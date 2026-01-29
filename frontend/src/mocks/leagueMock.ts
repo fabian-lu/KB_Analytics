@@ -14,6 +14,8 @@ import type {
   ManagerActivity,
   EngagementLevel,
   TransferMarketListing,
+  LeagueTransfer,
+  ManagerTraderStats,
 } from '@/types/league'
 import type { Manager, PlayerSummary, DashboardLineup } from '@/types/dashboard'
 import { mockMarketPlayers, toPlayerSummary } from './marketMock'
@@ -428,3 +430,190 @@ function createTransferMarketListings(): TransferMarketListing[] {
 }
 
 export const mockTransferMarketListings: TransferMarketListing[] = createTransferMarketListings()
+
+// ============================================
+// TRANSFER HISTORY
+// ============================================
+
+/**
+ * Generate mock transfer history for the league.
+ * Creates realistic transfers between managers over the past 60 days.
+ */
+function createTransferHistory(): LeagueTransfer[] {
+  const transfers: LeagueTransfer[] = []
+  const managers = mockManagerProfiles.map(p => p.manager)
+
+  // Use all players for transfer history
+  const playerPool = [...allPlayers]
+
+  let transferId = 1
+
+  // Generate 80-120 transfers over the past 60 days
+  const numTransfers = 80 + (Date.now() % 40)
+
+  for (let i = 0; i < numTransfers; i++) {
+    const seed = i * 17 + 31
+
+    // Pick random player
+    const playerIdx = seed % playerPool.length
+    const player = playerPool[playerIdx]
+
+    // Pick random manager (buyer)
+    const buyerIdx = (seed * 3) % managers.length
+    const buyer = managers[buyerIdx]
+
+    // Pick seller (another manager or null for Kickbase market)
+    const hasCounterparty = (seed % 3) !== 0 // 2/3 of transfers are between managers
+    const sellerIdx = (seed * 7 + 1) % managers.length
+    const seller = hasCounterparty && sellerIdx !== buyerIdx ? managers[sellerIdx] : null
+
+    // Calculate price with some variation from market value
+    const basePrice = player.market_value
+    const overpayPct = ((seed % 40) - 15) / 100 // -15% to +25%
+    const price = Math.round(basePrice * (1 + overpayPct))
+
+    // Days ago (0-60 days, weighted toward recent)
+    const daysAgo = Math.floor(Math.pow(seed % 100 / 100, 1.5) * 60)
+
+    const date = new Date()
+    date.setDate(date.getDate() - daysAgo)
+    date.setHours(10 + (seed % 12), (seed * 13) % 60)
+
+    const priceDiff = price - basePrice
+    const priceDiffPct = Math.round((priceDiff / basePrice) * 10000) / 100
+
+    // Create buy transfer for buyer
+    transfers.push({
+      id: `transfer-${transferId++}`,
+      player,
+      type: 'buy',
+      manager: buyer,
+      counterparty: seller,
+      price,
+      market_value_at_transfer: basePrice,
+      price_diff: priceDiff,
+      price_diff_pct: priceDiffPct,
+      date: date.toISOString(),
+      days_ago: daysAgo,
+    })
+
+    // If there's a seller (not Kickbase), create sell transfer
+    if (seller) {
+      transfers.push({
+        id: `transfer-${transferId++}`,
+        player,
+        type: 'sell',
+        manager: seller,
+        counterparty: buyer,
+        price,
+        market_value_at_transfer: basePrice,
+        price_diff: -priceDiff, // Seller's perspective: negative overpay = good for them
+        price_diff_pct: -priceDiffPct,
+        date: date.toISOString(),
+        days_ago: daysAgo,
+      })
+    }
+  }
+
+  // Sort by date descending (most recent first)
+  transfers.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+
+  return transfers
+}
+
+export const mockTransferHistory: LeagueTransfer[] = createTransferHistory()
+
+// ============================================
+// TRADER STATISTICS
+// ============================================
+
+/**
+ * Calculate trader statistics for each manager based on transfer history.
+ */
+function calculateTraderStats(): ManagerTraderStats[] {
+  const managers = mockManagerProfiles.map(p => p.manager)
+  const stats: ManagerTraderStats[] = []
+
+  for (const manager of managers) {
+    // Get all transfers for this manager
+    const managerTransfers = mockTransferHistory.filter(t => t.manager.id === manager.id)
+    const buys = managerTransfers.filter(t => t.type === 'buy')
+    const sells = managerTransfers.filter(t => t.type === 'sell')
+
+    const totalSpent = buys.reduce((sum, t) => sum + t.price, 0)
+    const totalReceived = sells.reduce((sum, t) => sum + t.price, 0)
+
+    const avgBuyPrice = buys.length > 0 ? totalSpent / buys.length : 0
+    const avgSellPrice = sells.length > 0 ? totalReceived / sells.length : 0
+
+    // Calculate average overpay on buys
+    const avgOverpayPct = buys.length > 0
+      ? buys.reduce((sum, t) => sum + t.price_diff_pct, 0) / buys.length
+      : 0
+
+    // Calculate flip profits (players bought and then sold)
+    let flipProfit = 0
+    let profitableFlips = 0
+    let unprofitableFlips = 0
+
+    const boughtPlayers = new Map<string, LeagueTransfer>() // player.id -> buy transfer
+    for (const buy of buys) {
+      boughtPlayers.set(buy.player.id, buy)
+    }
+
+    for (const sell of sells) {
+      const correspondingBuy = boughtPlayers.get(sell.player.id)
+      if (correspondingBuy) {
+        const profit = sell.price - correspondingBuy.price
+        flipProfit += profit
+        if (profit > 0) {
+          profitableFlips++
+        } else {
+          unprofitableFlips++
+        }
+      }
+    }
+
+    // Calculate ROI
+    const roiPct = totalSpent > 0
+      ? Math.round(((totalReceived - totalSpent) / totalSpent) * 10000) / 100
+      : 0
+
+    // Calculate position overpay preferences
+    const positionOverpay: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0 }
+    const positionCounts: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0 }
+
+    for (const buy of buys) {
+      const pos = buy.player.position
+      positionOverpay[pos] = (positionOverpay[pos] || 0) + buy.price_diff_pct
+      positionCounts[pos] = (positionCounts[pos] || 0) + 1
+    }
+
+    for (const pos of [1, 2, 3, 4]) {
+      if (positionCounts[pos] > 0) {
+        positionOverpay[pos] = Math.round((positionOverpay[pos] / positionCounts[pos]) * 100) / 100
+      }
+    }
+
+    stats.push({
+      manager,
+      total_transfers: managerTransfers.length,
+      buys: buys.length,
+      sells: sells.length,
+      total_spent: totalSpent,
+      total_received: totalReceived,
+      avg_buy_price: Math.round(avgBuyPrice),
+      avg_sell_price: Math.round(avgSellPrice),
+      avg_overpay_pct: Math.round(avgOverpayPct * 100) / 100,
+      flip_profit: flipProfit,
+      profitable_flips: profitableFlips,
+      unprofitable_flips: unprofitableFlips,
+      roi_pct: roiPct,
+      position_overpay: positionOverpay,
+    })
+  }
+
+  return stats
+}
+
+export const mockTraderStats: ManagerTraderStats[] = calculateTraderStats()

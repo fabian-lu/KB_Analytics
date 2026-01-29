@@ -37,6 +37,75 @@ export type TransferMarketSortOption =
   | 'value_change_7d'
 
 // ============================================
+// Transfer History
+// ============================================
+
+export type LeagueTransferType = 'buy' | 'sell'
+
+export interface LeagueTransfer {
+  id: string
+  /** The player being transferred */
+  player: PlayerSummary
+  /** Type of transfer from the perspective of the manager */
+  type: LeagueTransferType
+  /** Manager involved (buyer for 'buy', seller for 'sell') */
+  manager: Manager
+  /** The other party (null if bought from/sold to Kickbase) */
+  counterparty: Manager | null
+  /** Price paid/received */
+  price: number
+  /** Market value at time of transfer */
+  market_value_at_transfer: number
+  /** Difference: price - market_value (positive = overpay, negative = underpay) */
+  price_diff: number
+  /** Difference as percentage */
+  price_diff_pct: number
+  /** ISO timestamp of transfer */
+  date: string
+  /** Days ago (derived) */
+  days_ago: number
+}
+
+// ============================================
+// Trader Statistics
+// ============================================
+
+export interface ManagerTraderStats {
+  manager: Manager
+  /** Total number of transfers */
+  total_transfers: number
+  /** Number of buys */
+  buys: number
+  /** Number of sells */
+  sells: number
+  /** Total spent on buys */
+  total_spent: number
+  /** Total received from sells */
+  total_received: number
+  /** Average price paid per buy */
+  avg_buy_price: number
+  /** Average price received per sell */
+  avg_sell_price: number
+  /** Average overpay percentage on buys (positive = overpays, negative = underpays) */
+  avg_overpay_pct: number
+  /** Total profit/loss from flip trades (bought then sold same player) */
+  flip_profit: number
+  /** Number of profitable flips */
+  profitable_flips: number
+  /** Number of unprofitable flips */
+  unprofitable_flips: number
+  /** ROI percentage: (total_received - total_spent) / total_spent * 100 */
+  roi_pct: number
+  /** Position preferences: which positions they overpay most for */
+  position_overpay: Record<number, number> // position -> avg overpay %
+}
+
+export type TransferSortOption =
+  | 'date'
+  | 'price'
+  | 'price_diff'
+
+// ============================================
 // Kickbase Achievements
 // ============================================
 
